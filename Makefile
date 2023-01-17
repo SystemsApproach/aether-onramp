@@ -487,10 +487,12 @@ roc-4g-models: $(M)/roc
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
 	echo "API SERVICE : ${API_SERVICE}"
-	until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
-		curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
-		--header 'Content-Type: application/json' \
-		--data-raw "$$(cat ${ROC_DEFAULTENT_MODEL})"; do sleep 5; done
+	if [ "$(CHARTS)" != "release-2.0" -a "$(CHARTS)" != "release-1.6" ]; then \
+        until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
+            curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
+            --header 'Content-Type: application/json' \
+            --data-raw "$$(cat ${ROC_DEFAULTENT_MODEL})"; do sleep 5; done; \
+	fi
 	until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
 		curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
 		--header 'Content-Type: application/json' \
@@ -509,10 +511,12 @@ roc-5g-models: $(M)/roc
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
 	echo "API SERVICE : ${API_SERVICE}"
-	until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
-		curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
-		--header 'Content-Type: application/json' \
-		--data-raw "$$(cat ${ROC_DEFAULTENT_MODEL})"; do sleep 5; done
+	if [ "$(CHARTS)" != "release-2.0" -a "$(CHARTS)" != "release-1.6" ]; then \
+        until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
+            curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
+            --header 'Content-Type: application/json' \
+            --data-raw "$$(cat ${ROC_DEFAULTENT_MODEL})"; do sleep 5; done; \
+	fi
 	until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
 		curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
 		--header 'Content-Type: application/json' \
