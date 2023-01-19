@@ -564,6 +564,26 @@ monitoring-5g: $(M)/monitoring
 	kubectl create namespace cattle-dashboards || true
 	kubectl apply -k resources/5g-monitoring
 
+fleet-ready: $(M)/fleet-ready
+$(M)/fleet-ready: $(M)/helm-ready
+	helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
+		--namespace=cattle-fleet-system \
+		--create-namespace \
+		fleet-crd \
+		https://github.com/rancher/fleet/releases/download/v0.5.0/fleet-crd-0.5.0.tgz
+	helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
+		--namespace=cattle-fleet-system \
+		--create-namespace \
+		fleet \
+		https://github.com/rancher/fleet/releases/download/v0.5.0/fleet-0.5.0.tgz
+	touch $(M)/fleet-ready
+
+fleet-clean:
+	helm -n cattle-fleet-system delete fleet || true
+	helm -n cattle-fleet-system delete fleet-crd || true
+	kubectl delete namespace cattle-fleet-system || true
+	rm $(M)/fleet-ready
+
 enodebd:
 	helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
 		--namespace=aether-apps \
