@@ -7,7 +7,7 @@ Aether OnRamp is intended to provide an incremental path for users to
 * Then develop for and contribute to Aether; 
 * And finally deploy and operate Aether.
 
-Aether OnRamp is derived from `Aether-in-a-Box (AiaB) <https://docs.aetherproject.org/master/developer/aiab.html#>`_
+Aether OnRamp is derived from [Aether-in-a-Box (AiaB)](https://docs.aetherproject.org/master/developer/aiab.html#)
 initially refactored to support only a streamlined sequenece of configurations,
 but over time, augmented to support more scalable deployments.
 
@@ -132,18 +132,18 @@ directory:
 		name: aiab
 		namespace: fleet-local
 	spec:
-		repo: "https://github.com/llpeterson/fleet-aiab"  # Replace with your fork
+		repo: "https://github.com/llpeterson/aether-apps"  # Replace with your fork
 		branch: main
 		paths:
 		- aether-2.1-alpha   # Specify one of "aether-2.0" or "aether-2.1-alpha"
 
-This particular version uses `https://github.com/llpeterson/fleet-aiab` as its
+This particular version uses `https://github.com/llpeterson/aether-apps` as its
 *source repo*. You should fork that repo and edit `deploy.yaml` accordingly.
 Then install Fleet on your Kubernetes cluster by typing
 
 	make fleet-ready
 
-Once complete, `kubectl` will show the `fleet-system`namespace  running.
+Once complete, `kubectl` will show the `cattle-fleet-system`namespace  running.
 All that's left is to type the following command to "activate" Fleet:
 
 	kubectl apply -f deploy.yaml
@@ -157,3 +157,11 @@ Once complete, you can run the same emulated test against Aether:
 
 	make 5g-test
 
+Note that once you configure your cluster to use Fleet to deploy the Kubernetes
+applications (e.g., ROC, Monitoring, SD-Core), the "clean" targets in the Makefile
+will no longer work correctly: Fleet will persist in reinstalling any namespaces
+that have been deleted. You have to instead first uninstall Fleet by typing:
+
+	make fleet-clean
+
+before executing the other "clean" targets.
