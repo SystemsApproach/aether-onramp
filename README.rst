@@ -1,3 +1,5 @@
+.. vim: syntax=rst
+
 Aether OnRamp
 ===============
 
