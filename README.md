@@ -150,12 +150,12 @@ deploy the three applications using the GitOps approach (as described next).
 ## GitOps Tooling
 
 The Make targets given above directly invoke Helm to install the
-applications, using application-specific "values" files found the
-cloned directory (e.g.,`~/aether-onramp/roc-values.yaml`) to overrides
+applications, using application-specific *values files* found the
+cloned directory (e.g.,`~/aether-onramp/roc-values.yaml`) to override
 the values for the correspond Helm charts. In an operational setting,
 all the information needed to deploy a set of Kubernetes applications
 is checked into a Git repo, with a tool like Fleet automatically
-updating the deployment whenever changes to the configuration are
+updating the deployment whenever it detects changes to the configuration
 checked into the repo.
 
 To see how this works, look at the `deploy.yaml` file included in the cloned
@@ -217,7 +217,8 @@ before executing the other "clean" targets.
 > TODO: The set of bundles included in the *aether-apps* repo is not complete.
 > Still need to add missing pieces (e.g., the monitoring subsystem).
 
-## Enabling SR-IOV
+## Connecting Physical Base Stations
 
+## Enabling SR-IOV
 
 ## Adding Servers to the Cluster
