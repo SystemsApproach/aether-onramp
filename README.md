@@ -31,8 +31,8 @@ complex configurations.
 To get started, Aether can be configured along three dimensions:
 
 * Wireless Technology: 4G vs 5G.
-* Target Server: Virtual v Physical Machine
-* Target Workload: Emulated vs Physical Base Station(s)
+* Target Server: Virtual v Physical Machine.
+* Target Workload: Emulated vs Physical Base Station(s).
 	
 Once you are familiar with these options (which are sufficient for learning
 about Aether and/or developing for Aether), we add more complex
@@ -52,8 +52,7 @@ long-term goal that we do not consider here.
 
 ## Getting Started
 
-To initialize Aether OnRamp, first clone the Aether OnRamp repository on the
-target deployment machine.
+Clone the Aether OnRamp repository on the target deployment machine:
 
 ```
     cd ~
@@ -61,15 +60,16 @@ target deployment machine.
     cd ~/aether-onramp
 ```
 
-Then execute the following sequence of Make targets, where after each, run
+Then execute the sequence of Makefiles targets described in the
+following subsections, where after each, run:
 
 ```
     kubectl get pods --all-namespaces
 ```
 
-to verify the set of Kubernetes namespaces that are now operational.
+to verify the specified set of Kubernetes namespaces that are now operational.
 
-### Bring Up Kubernetes Cluster
+### Bring Up Kubernetes
 
 The first step is to bring up an RKE2.0 Kubernetes cluster on your target server.
 Do this by typing:
@@ -82,15 +82,16 @@ Do this by typing:
 
 ### Connect Kubernetes to the Network
 
-Since Aether ultimately provides a 5G connectivity service, how the cluster you just
-installed connects to the network is an important (and difficult to get right) detail.
-As a first pass, Aether OnRamp borrows a configuration from AiaB; eventually, support
-for optimizations like SR-IOV will also need to be included. Type:
+Since Aether ultimately provides a connectivity service, how the
+cluster you just installed connects to the network is an important
+detail. As a first pass, Aether OnRamp borrows a configuration from
+AiaB; eventually, support for optimizations like SR-IOV will also need
+to be included. Type:
 
 ```
     make router-pod
 ```
-This target primarily configures Linux (via `systemctl`), but also starts a Quagga
+This target configures Linux (via `systemctl`), but also starts a Quagga
 router running inside the cluster.
 
 ### Bring Up Aether Management Platform
@@ -105,9 +106,10 @@ be deployed on the same cluster with the following two Make targets:
 ```
 	
 The first command brings up ROC and loads it with a data model for the
-latest API. `kubectl` will show the `aether-roc` and `cattle-monitoring-system`
-namespaces now running in support of these two services, respectively  (plus new
-`atomic-runtime` pods in the `kube-system` name space).
+latest API. `kubectl` will show the `aether-roc` and
+`cattle-monitoring-system` namespaces now running in support of these
+two services, respectively  (plus new `atomic-runtime` pods in the
+`kube-system` name space).
 
 ### Bring Up SD-Core
 
@@ -117,8 +119,8 @@ We are now ready to bring up the 5G version of the SD-Core:
     CHARTS=latest make 5g-core
 ```
 
-`kubectl` will show the `omec` namespace running. (For historical reasons, the
-Core is called `omec` instead of `sd-core`).
+`kubectl` will show the `omec` namespace running. (For historical
+reasons, the Core is called `omec` instead of `sd-core`).
 
 ### Run Emulated Test of SD-Core
 
@@ -155,11 +157,12 @@ If you want to also tear down Kubernetes for a fresh install, type:
 ```
 
 Alternatively, leave Kubernetes (and the router) running, and instead
-deploy the three applications using the GitOps approach (as described next).
+deploy the three applications using the GitOps approach (as described
+in the next section).
 
 ## GitOps Tooling
 
-The Make targets given above directly invoke Helm to install the
+The Makefile targets given above directly invoke Helm to install the
 applications, using application-specific *values files* found the
 cloned directory (e.g.,`~/aether-onramp/roc-values.yaml`) to override
 the values for the correspond Helm charts. In an operational setting,
@@ -200,8 +203,8 @@ All that's left is to type the following command to "activate" Fleet:
     kubectl apply -f deploy.yaml
 ```
 
-The following command will let you track Fleet as it makes progress installing
-bundles:
+The following command will let you track Fleet as it makes progress
+installing bundles:
 
 ```
     kubectl -n fleet-local get bundles
@@ -213,10 +216,11 @@ Once complete, you can run the same emulated test against Aether:
     make 5g-test
 ```
 
-Note that once you configure your cluster to use Fleet to deploy the Kubernetes
-applications (e.g., ROC, Monitoring, SD-Core), the "clean" targets in the Makefile
-will no longer work correctly: Fleet will persist in reinstalling any namespaces
-that have been deleted. You have to instead first uninstall Fleet by typing:
+Note that once you configure your cluster to use Fleet to deploy the
+Kubernetes applications (e.g., ROC, Monitoring, SD-Core), the "clean"
+targets in the Makefile will no longer work correctly: Fleet will
+persist in reinstalling any namespaces that have been deleted. You
+have to instead first uninstall Fleet by typing:
 
 ```
     make fleet-clean
