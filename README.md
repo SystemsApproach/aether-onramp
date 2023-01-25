@@ -13,15 +13,18 @@ refactored to help users step through a sequence of increasingly
 complex configurations.
 
 > TODO: The current version is mostly focused on how to bring up
-> Aether. Still need to augment with guidance on how to interact with the
+> Aether. Need to augment with guidance on how to interact with the
 > running system, including how to make changes.
 
 > TODO: Several "refactoring/cleanup" tasks remain, including: (1) strip
 > unused targets and config options from the Makefile and deleted them
 > from the repo; (2) treat different version of Aether (e.g., 2.0 vs 2.1) in
 > a uniform way; (3) treat auxilary config files (e.g., ROC models and
-> monitoring resourcs) in a uniform way (and in a way the also works
-> with Fleet.
+> monitoring resources) in a uniform way (and in a way the also works
+> with Fleet).
+
+> TODO: Need to give a clear description of how to point your browser
+> at the relevant dashboards.
 
 ## Configuration Options
 
