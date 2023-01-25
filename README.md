@@ -90,8 +90,8 @@ applications: Runtime Control (ROC) and a Monitoring Service. They can
 be deployed on the same cluster with the following two Make targets:
 
 ```
-	CHARTS=latest make roc-5g-models
-	make 5g-monitoring
+    CHARTS=latest make roc-5g-models
+    make 5g-monitoring
 ```
 	
 The first command brings up ROC and loads it with a data model for the
@@ -104,7 +104,7 @@ namespaces now running in support of these two services, respectively  (plus new
 We are now ready to bring up the 5G version of the SD-Core:
 
 ```
-	CHARTS=latest make 5g-core
+    CHARTS=latest make 5g-core
 ```
 
 `kubectl` will show the `omec` namespace running. (For historical reasons, the
@@ -115,7 +115,7 @@ Core is called `omec` instead of `sd-core`).
 We can now test SD-Core with emulated traffic by typing:
 
 ```
-	make 5g-test
+    make 5g-test
 ```
 
 The monitoring dashboard shows two emulated gNBs come online and five
@@ -132,16 +132,16 @@ Working in reverse order, the following Make targets tear down the three applica
 you just installed, restoring the base Kubernetes cluster (plus Quagga router):
 
 ```
-	make omec-clean
-	make monitoring-clean
-	make roc-clean
+    make omec-clean
+    make monitoring-clean
+    make roc-clean
 ```
 
 If you want to also tear down Kubernetes for a fresh install, type:
 
 ```
-	make router-clean
-	make clean
+    make router-clean
+    make clean
 ```
 
 Alternatively, leave Kubernetes (and the router) running, and instead
@@ -162,16 +162,16 @@ To see how this works, look at the `deploy.yaml` file included in the cloned
 directory:
 
 ```
-	apiVersion: fleet.cattle.io/v1alpha1
-	kind: GitRepo
-	metadata:
-		name: aiab
-		namespace: fleet-local
-	spec:
-		repo: "https://github.com/llpeterson/aether-apps"  # Replace with your fork
-		branch: main
-		paths:
-		- aether-2.1-alpha   # Specify one of "aether-2.0" or "aether-2.1-alpha"
+    apiVersion: fleet.cattle.io/v1alpha1
+    kind: GitRepo
+    metadata:
+        name: aiab
+        namespace: fleet-local
+    spec:
+        repo: "https://github.com/llpeterson/aether-apps"  # Replace with your fork
+        branch: main
+	    paths:
+        - aether-2.1-alpha   # Specify one of "aether-2.0" or "aether-2.1-alpha"
 ```
 
 This particular version uses
@@ -180,27 +180,27 @@ should fork that repo and edit `deploy.yaml` to point to your copy.
 Then install Fleet on your Kubernetes cluster by typing
 
 ```
-	make fleet-ready
+    make fleet-ready
 ```
 
 Once complete, `kubectl` will show the `cattle-fleet-system` namespace  running.
 All that's left is to type the following command to "activate" Fleet:
 
 ```
-	kubectl apply -f deploy.yaml
+    kubectl apply -f deploy.yaml
 ```
 
 The following command will let you track Fleet as it makes progress installing
 bundles:
 
 ```
-	kubectl -n fleet-local get bundles
+    kubectl -n fleet-local get bundles
 ```
 
 Once complete, you can run the same emulated test against Aether:
 
 ```
-	make 5g-test
+    make 5g-test
 ```
 
 Note that once you configure your cluster to use Fleet to deploy the Kubernetes
@@ -209,7 +209,7 @@ will no longer work correctly: Fleet will persist in reinstalling any namespaces
 that have been deleted. You have to instead first uninstall Fleet by typing:
 
 ```
-	make fleet-clean
+    make fleet-clean
 ```
 
 before executing the other "clean" targets.
@@ -221,4 +221,3 @@ before executing the other "clean" targets.
 
 
 ## Adding Servers to the Cluster
-
