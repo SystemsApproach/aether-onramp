@@ -220,8 +220,7 @@ directory:
 This particular version uses
 `https://github.com/llpeterson/aether-apps` as its *source repo*. You
 should fork that repo and then edit your local `deploy.yaml` to point
-to the new repo you just forked. Then install Fleet on your Kubernetes
-cluster by typing
+to your new repo. Then install Fleet on your Kubernetes cluster by typing:
 
 ```
     make fleet-ready
@@ -235,29 +234,33 @@ All that's left is to type the following command to "activate" Fleet:
 ```
 
 The following command will let you track Fleet as it makes progress
-installing bundles:
+installing applications (which Fleet refers to as *bundles*):
 
 ```
     kubectl -n fleet-local get bundles
 ```
 
-Once complete, you can run the same emulated test against Aether:
+Once complete, you can rerun the same emulated 5G test against Aether:
 
 ```
     make 5g-test
 ```
 
 Note that once you configure your cluster to use Fleet to deploy the
-Kubernetes applications (e.g., ROC, Monitoring, SD-Core), the "clean"
-targets in the Makefile will no longer work correctly: Fleet will
-persist in reinstalling any namespaces that have been
-deleted. You first have to uninstall Fleet by typing:
+Kubernetes applications, the "clean" targets in the Makefile will no
+longer work correctly: Fleet will persist in reinstalling any
+namespaces that have been deleted. You first have to uninstall Fleet
+by typing:
 
 ```
     make fleet-clean
 ```
 
-before executing the other "clean" targets.
+before executing the other "clean" targets. Alternatively, you can
+modify your forked copy of the `aether-apps` repo to no longer
+include applications you do not want Fleet to instantiate, mimicing
+how an operator would change a deployment by checking in a new
+configuration.
 
 > TODO: The set of bundles included in the *aether-apps* repo is not complete.
 > Still need to add missing pieces (e.g., the monitoring subsystem).
