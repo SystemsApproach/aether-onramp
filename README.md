@@ -45,12 +45,12 @@ for more details), but for our purposes, we start with a 5G deployment
 running on a physical server. It will include an emulated RAN instead
 of a physical base station.
 
-Once you are familiar with this configuration, which is sufficient for learning
-about Aether, we add more complex configurations. These include:
+This configuration is sufficient for learning about Aether, after
+which we add more complex configurations. These include:
 
 * Enabling GitOps deployment tools.
 * Connecting a physical base station.
-* Optimizing performance by enabling SR-IOV.
+* Enabling SR-IOV to optimize performance.
 * Scaling from a signal server to multiple servers.
 
 Eventually, bringing up multiple Aether clusters under the control of
@@ -72,7 +72,7 @@ follows:
 * `sudo ufw status` should show inactive;
 * `sudo iptables -L` and `sudo nft list` should show a blank configuration.
 
-Once ready, clone the Aether OnRamp repository on this target deployment machine:
+Once ready, clone the Aether OnRamp repo on this target deployment machine:
 
 ```
     cd ~
@@ -82,8 +82,8 @@ Once ready, clone the Aether OnRamp repository on this target deployment machine
 
 You will then execute the sequence of Makefiles targets described in
 the rest of this section. After each of these steps, run the following
-command to verify the specified set of Kubernetes namespaces that are
-now operational.
+command to verify that the specified set of Kubernetes namespaces are
+operational.
 
 ```
     kubectl get pods --all-namespaces
@@ -103,15 +103,16 @@ Do this by typing:
     make node-prep
 ```
 
-`kubectl` will show the `kube-system` and `calico-system` namespaces running.
+`kubectl` will show the `kube-system` and `calico-system` namespaces
+running.
 
 ### Connect Kubernetes to the Network
 
 Since Aether ultimately provides a connectivity service, how the
 cluster you just installed connects to the network is an important
 detail. As a first pass, Aether OnRamp borrows a configuration from
-AiaB; eventually, support for optimizations like SR-IOV will also need
-to be included. Type:
+AiaB; eventually, support for optimizations like SR-IOV will also be
+included. Type:
 
 ```
     make router-pod
@@ -219,8 +220,9 @@ directory:
 
 This particular version uses
 `https://github.com/llpeterson/aether-apps` as its *source repo*. You
-should fork that repo and edit `deploy.yaml` to point to your copy.
-Then install Fleet on your Kubernetes cluster by typing
+should fork that repo and then edit your local `deploy.yaml` to point
+to the new repo you just forked. Then install Fleet on your Kubernetes
+cluster by typing
 
 ```
     make fleet-ready
@@ -249,8 +251,8 @@ Once complete, you can run the same emulated test against Aether:
 Note that once you configure your cluster to use Fleet to deploy the
 Kubernetes applications (e.g., ROC, Monitoring, SD-Core), the "clean"
 targets in the Makefile will no longer work correctly: Fleet will
-persist in reinstalling any namespaces that have been deleted. You
-have to instead first uninstall Fleet by typing:
+persist in reinstalling any namespaces that have been
+deleted. You first have to uninstall Fleet by typing:
 
 ```
     make fleet-clean
