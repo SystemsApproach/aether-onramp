@@ -14,45 +14,65 @@ complex configurations.
 
 > TODO: The current version is mostly focused on how to bring up
 > Aether. Need to augment with guidance on how to interact with the
-> running system, including how to make changes.
+> running system, including how to make changes. Much still to be
+> lifted from the AiaB guide.
 
 > TODO: Several "refactoring/cleanup" tasks remain, including: (1) strip
 > unused targets and config options from the Makefile and deleted them
-> from the repo; (2) treat different version of Aether (e.g., 2.0 vs 2.1) in
-> a uniform way; (3) treat auxilary config files (e.g., ROC models and
-> monitoring resources) in a uniform way (and in a way the also works
-> with Fleet).
+> from the repo; and (2) treat different version of Aether (e.g., 2.0 vs 2.1) in
+> a uniform way.
 
-> TODO: Need to give a clear description of how to point your browser
+> TODO: Still need to give a clear description of how to point your browser
 > at the relevant dashboards.
 
 ## Configuration Options
 
-To get started, Aether can be configured along three dimensions:
+Aether supports several configuration options, but the primary goal
+of OnRamp is to prescribe a (mostly) linear sequence of steps a new
+user can follow to bring up an operational system. This document
+also identifies "alternate paths" you can follow, but does not
+document them in detail.
 
-* Wireless Technology: 4G vs 5G.
-* Target Server: Virtual v Physical Machine.
-* Target Workload: Emulated vs Physical Base Station(s).
+With the goal of first learning about Aether, there are two relevant
+questions:
+
+* Do you want to bring up a 4G or a 5G network?
+* Do you want to run Aether in a VM or on a physical server?
 	
-Once you are familiar with these options (which are sufficient for learning
-about Aether and/or developing for Aether), we add more complex
-configurations. These include:
+All four combinations are supported (see the
+[AiaB Guide](https://docs.aetherproject.org/master/developer/aiab.html#)
+for more details), but for our purposes, we start with a 5G deployment
+running on a physical server. It will include an emulated RAN instead
+of a physical base station.
+
+Once you are familiar with this configuration, which is sufficient for learning
+about Aether, we add more complex configurations. These include:
 
 * Enabling GitOps deployment tools.
+* Connecting a physical base station.
 * Optimizing performance by enabling SR-IOV.
 * Scaling from a signal server to multiple servers.
-
-> TODO: Only the 5G/Physical Server/Emulated RAN configuration has been
-> debugged at this point. Support for SR-IOV and multi-server
->  clusters is still todo.
 
 Eventually, bringing up multiple Aether clusters under the control of
 a centralized management platform will be in scope, but that is a
 long-term goal that we do not consider here.
 
-## Getting Started
+## Stage 1: Bring Up Aether
 
-Clone the Aether OnRamp repository on the target deployment machine:
+Aether OnRamp assumes a physical server, which should meet the
+following requirements:
+
+* Haswell CPU (or newer), with at least 4 CPUs and 12GB RAM.
+* Clean install of Ubuntu 18.04, 20.04, or 22.04, with 4.15 (or later) kernel.
+
+You must be able able to run `sudo` without a password, and there
+should be no firewall running on the server, which you can verify as
+follows:
+
+* `sudo ufw status` should show inactive;
+* `sudo iptables -L` and `sudo nft list` should show a blank configuration.
+
+Once ready, clone the Aether OnRamp repository on this target deployment machine:
 
 ```
     cd ~
@@ -60,16 +80,21 @@ Clone the Aether OnRamp repository on the target deployment machine:
     cd ~/aether-onramp
 ```
 
-Then execute the sequence of Makefiles targets described in the
-following subsections, where after each, run:
+You will then execute the sequence of Makefiles targets described in
+the rest of this section. After each of these steps, run the following
+command to verify the specified set of Kubernetes namespaces that are
+now operational.
 
 ```
     kubectl get pods --all-namespaces
 ```
 
-to verify the specified set of Kubernetes namespaces that are now operational.
+If you are not familiar with `kubectl` (the CLI for Kubernetes), we
+recommend that you start with
+[Kubernetes Tutorial](https://kubernetes.io/docs/tutorials/kubernetes-basics/).
 
-### Bring Up Kubernetes
+
+### Install Kubernetes
 
 The first step is to bring up an RKE2.0 Kubernetes cluster on your target server.
 Do this by typing:
@@ -111,6 +136,11 @@ latest API. `kubectl` will show the `aether-roc` and
 two services, respectively  (plus new `atomic-runtime` pods in the
 `kube-system` name space).
 
+> TODO: Need to find a clean way to deal with ROC models and
+> Monitoring resources (that will also work with Fleet). Might also
+> make sense to combine the two subsystems into a single target
+> (e.g., "make amp").
+
 ### Bring Up SD-Core
 
 We are now ready to bring up the 5G version of the SD-Core:
@@ -122,7 +152,7 @@ We are now ready to bring up the 5G version of the SD-Core:
 `kubectl` will show the `omec` namespace running. (For historical
 reasons, the Core is called `omec` instead of `sd-core`).
 
-### Run Emulated Test of SD-Core
+### Run Emulated RAN Test
 
 We can now test SD-Core with emulated traffic by typing:
 
@@ -160,7 +190,7 @@ Alternatively, leave Kubernetes (and the router) running, and instead
 deploy the three applications using the GitOps approach (as described
 in the next section).
 
-## GitOps Tooling
+## Stage 2: Add GitOps Tooling
 
 The Makefile targets given above directly invoke Helm to install the
 applications, using application-specific *values files* found the
@@ -231,8 +261,8 @@ before executing the other "clean" targets.
 > TODO: The set of bundles included in the *aether-apps* repo is not complete.
 > Still need to add missing pieces (e.g., the monitoring subsystem).
 
-## Connecting Physical Base Stations
+## Stage 3: Connect Physical Base Station
 
-## Enabling SR-IOV
+## Stage 4: Enable SR-IOV
 
-## Adding Servers to the Cluster
+## Stage5:  Add Servers to the Cluster
