@@ -18,9 +18,9 @@ complex configurations.
 > lifted from the AiaB guide.
 
 > TODO: Several "refactoring/cleanup" tasks remain, including: (1) strip
-> unused targets and config options from the Makefile and deleted them
-> from the repo; and (2) treat different version of Aether (e.g., 2.0 vs 2.1) in
-> a uniform way.
+> unused targets and config options from the Makefile and delete them
+> from the repo; and (2) treat different versions of Aether (e.g., 2.0 vs 2.1)
+> in a uniform way.
 
 > TODO: Still need to give a clear description of how to point your browser
 > at the relevant dashboards.
@@ -42,19 +42,23 @@ questions:
 All four combinations are supported (see the
 [AiaB Guide](https://docs.aetherproject.org/master/developer/aiab.html#)
 for more details), but for our purposes, we start with a 5G deployment
-running on a physical server. It will initially include an emulated
-RAN instead of a physical base station. This configuration is
-sufficient for learning about Aether, after which we add more complex
-configurations. These include:
+running on a physical server. This starting configuration includes
+an emulated RAN instead of a physical base station, which is
+sufficient for learning about Aether. Later stages will add more
+complex configurations. These include:
 
 * Enabling GitOps deployment tools.
 * Connecting a physical base station.
 * Enabling SR-IOV to optimize performance.
 * Scaling from a signal server to multiple servers.
 
-Eventually, bringing up multiple Aether clusters under the control of
-a centralized management platform will be in scope, but that is a
-long-term goal that we do not consider here.
+Note that if you don't have access to a physical server, running a VM
+on your laptop will work for the first stage, but you will be limited
+how far you can go in bringing up a live deployment.
+
+Also note that bringing up multiple Aether clusters under the control of
+a centralized management platform is not currently in scope, but it is a
+long-term goal that we will consider in the future.
 
 ## Stage 1: Bring Up Aether
 
