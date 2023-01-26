@@ -42,11 +42,10 @@ questions:
 All four combinations are supported (see the
 [AiaB Guide](https://docs.aetherproject.org/master/developer/aiab.html#)
 for more details), but for our purposes, we start with a 5G deployment
-running on a physical server. It will include an emulated RAN instead
-of a physical base station.
-
-This configuration is sufficient for learning about Aether, after
-which we add more complex configurations. These include:
+running on a physical server. It will initially include an emulated
+RAN instead of a physical base station. This configuration is
+sufficient for learning about Aether, after which we add more complex
+configurations. These include:
 
 * Enabling GitOps deployment tools.
 * Connecting a physical base station.
