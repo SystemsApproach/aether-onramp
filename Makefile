@@ -182,7 +182,6 @@ $(M)/helm-ready: | $(M)/k8s-ready
 	helm repo add aether https://charts.aetherproject.org
 	helm repo add rancher http://charts.rancher.io/
 	touch $@
-endif
 
 ifeq ($(K8S_INSTALL),rke2)
 $(M)/k8s-ready: | $(M)/setup
