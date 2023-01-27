@@ -130,15 +130,29 @@ applications: Runtime Control (ROC) and a Monitoring Service. They can
 be deployed on the same cluster with the following two Make targets:
 
 ```
-    CHARTS=latest make roc-5g-models
-    make 5g-monitoring
+    make roc-5g
+    make monitoring-5g
 ```
 	
 The first command brings up ROC and loads it with a data model for the
-latest API. `kubectl` will show the `aether-roc` and
+Aether API. The second command brings up the Monitoring Service
+(Grafana running on top of Prometheus) and loads it with a set of
+dashboards.
+
+`kubectl` will show the `aether-roc` and
 `cattle-monitoring-system` namespaces now running in support of these
 two services, respectively  (plus new `atomic-runtime` pods in the
 `kube-system` name space).
+
+You can access the dashboards for the two subsystems, respectively, at
+
+```
+    http://<server_ip>:31194
+    http://<server-ip>:30950
+```
+
+> TODO: Should provide a minimal tour of the two dashboards,
+> explaining some of the default values (e.g., AiaB Slice, AiaB Site).
 
 > TODO: Need to find a clean way to deal with ROC models and
 > Monitoring resources (that will also work with Fleet). Might also
@@ -150,7 +164,7 @@ two services, respectively  (plus new `atomic-runtime` pods in the
 We are now ready to bring up the 5G version of the SD-Core:
 
 ```
-    CHARTS=latest make 5g-core
+    make 5g-core
 ```
 
 `kubectl` will show the `omec` namespace running. (For historical
