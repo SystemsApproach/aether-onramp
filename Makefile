@@ -182,7 +182,7 @@ $(M)/helm-ready: | $(M)/k8s-ready
 	helm repo add aether https://charts.aetherproject.org
 	helm repo add rancher http://charts.rancher.io/
 	touch $@
-
+endif
 
 ifeq ($(K8S_INSTALL),rke2)
 $(M)/k8s-ready: | $(M)/setup
@@ -214,6 +214,7 @@ $(M)/k8s-ready: | $(M)/setup
 	sudo cp /etc/rancher/rke2/rke2.yaml $(HOME)/.kube/config
 	sudo chown -R $(shell id -u):$(shell id -g) $(HOME)/.kube
 	touch $@
+endif
 
 $(M)/helm-ready: | $(M)/k8s-ready
 	curl -fsSL -o ${GET_HELM} https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
