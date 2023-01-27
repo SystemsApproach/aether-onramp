@@ -21,6 +21,7 @@ ROC_5G_MODELS        ?= $(MAKEDIR)/roc-5g-models.json
 TEST_APP_VALUES      ?= $(MAKEDIR)/5g-test-apps-values.yaml
 GET_HELM              = get_helm.sh
 
+KUBESPRAY_VERSION ?= release-2.17
 DOCKER_VERSION    ?= '20.10'
 HELM_VERSION	  ?= v3.6.3
 KUBECTL_VERSION   ?= v1.23.0
@@ -133,6 +134,13 @@ endif
 	fi
 	touch $@
 
+ifeq ($(K8S_INSTALL),kubespray)
+$(M)/setup: | $(M) $(M)/interface-check
+	sudo $(SCRIPTDIR)/cloudlab-disksetup.sh
+	sudo apt update; sudo apt install -y software-properties-common python3 python3-pip python3-venv jq httpie ipvsadm
+	touch $@
+endif
+
 ifeq ($(K8S_INSTALL),rke2)
 $(M)/initial-setup: | $(M) $(M)/interface-check
 	sudo $(SCRIPTDIR)/cloudlab-disksetup.sh
@@ -167,12 +175,48 @@ $(M)/setup: | $(M)/initial-setup $(M)/proxy-setting
 	touch $@
 endif
 
+$(BUILD)/kubespray: | $(M)/setup
+	mkdir -p $(BUILD)
+	cd $(BUILD); git clone https://github.com/kubernetes-incubator/kubespray.git -b $(KUBESPRAY_VERSION)
+
 $(VENV)/bin/activate: | $(M)/setup
 	python3 -m venv $(VENV)
 	source "$(VENV)/bin/activate" && \
 	python -m pip install -U pip && \
 	deactivate
 
+$(M)/kubespray-requirements: $(BUILD)/kubespray | $(VENV)/bin/activate
+	source "$(VENV)/bin/activate" && \
+	pip install -r $(BUILD)/kubespray/requirements.txt
+	touch $@
+
+ifeq ($(K8S_INSTALL),kubespray)
+$(M)/k8s-ready: | $(M)/setup $(BUILD)/kubespray $(VENV)/bin/activate $(M)/kubespray-requirements
+	source "$(VENV)/bin/activate" && cd $(BUILD)/kubespray; \
+	ansible-playbook -b -i inventory/local/hosts.ini \
+		-e "{'http_proxy' : $(HTTP_PROXY)}" \
+		-e "{'https_proxy' : $(HTTPS_PROXY)}" \
+		-e "{'no_proxy' : $(NO_PROXY)}" \
+		-e "{'override_system_hostname' : False, 'disable_swap' : True}" \
+		-e "{'docker_version' : $(DOCKER_VERSION)}" \
+		-e "{'docker_iptables_enabled' : True}" \
+		-e "{'kube_version' : $(K8S_VERSION)}" \
+		-e "{'kube_network_plugin_multus' : True, 'multus_version' : stable, 'multus_cni_version' : 0.3.1}" \
+		-e "{'kube_proxy_metrics_bind_address' : 0.0.0.0:10249}" \
+		-e "{'kube_pods_subnet' : 192.168.84.0/24, 'kube_service_addresses' : 192.168.85.0/24}" \
+		-e "{'kube_apiserver_node_port_range' : 2000-36767}" \
+		-e "{'kubeadm_enabled': True}" \
+		-e "{'kube_feature_gates' : [SCTPSupport=True]}" \
+		-e "{'kubelet_custom_flags' : [--allowed-unsafe-sysctls=net.*, --node-ip=$(NODE_IP)]}" \
+		-e "{'dns_min_replicas' : 1}" \
+		-e "{'helm_enabled' : True, 'helm_version' : $(HELM_VERSION)}" \
+		cluster.yml
+	mkdir -p $(HOME)/.kube
+	sudo cp -f /etc/kubernetes/admin.conf $(HOME)/.kube/config
+	sudo chown $(shell id -u):$(shell id -g) $(HOME)/.kube/config
+	kubectl wait pod -n kube-system --for=condition=Ready --all
+	sudo adduser $(USER) docker
+	touch $@
 
 $(M)/helm-ready: | $(M)/k8s-ready
 	helm repo add incubator https://charts.helm.sh/incubator
@@ -182,6 +226,7 @@ $(M)/helm-ready: | $(M)/k8s-ready
 	helm repo add aether https://charts.aetherproject.org
 	helm repo add rancher http://charts.rancher.io/
 	touch $@
+endif
 
 ifeq ($(K8S_INSTALL),rke2)
 $(M)/k8s-ready: | $(M)/setup
@@ -213,7 +258,6 @@ $(M)/k8s-ready: | $(M)/setup
 	sudo cp /etc/rancher/rke2/rke2.yaml $(HOME)/.kube/config
 	sudo chown -R $(shell id -u):$(shell id -g) $(HOME)/.kube
 	touch $@
-endif
 
 $(M)/helm-ready: | $(M)/k8s-ready
 	curl -fsSL -o ${GET_HELM} https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -306,6 +350,23 @@ $(M)/5g-core:
 $(BUILD)/openairinterface: | $(M)/setup
 	mkdir -p $(BUILD)
 	cd $(BUILD); git clone https://github.com/opencord/openairinterface.git
+
+ifeq ($(K8S_INSTALL),kubespray)
+download-ue-image: | $(M)/k8s-ready $(BUILD)/openairinterface
+	sg docker -c "docker pull ${OAISIM_UE_IMAGE} && \
+		docker tag ${OAISIM_UE_IMAGE} omecproject/lte-uesoftmodem:1.1.0"
+	touch $(M)/ue-image
+
+$(M)/ue-image: | $(M)/k8s-ready $(BUILD)/openairinterface
+	cd $(BUILD)/openairinterface; \
+	sg docker -c "docker build . --target lte-uesoftmodem \
+		--network=host \
+		--build-arg http_proxy=$(HTTP_PROXY)/ \
+		--build-arg build_base=omecproject/oai-base:1.1.0 \
+		--file Dockerfile.ue \
+		--tag omecproject/lte-uesoftmodem:1.1.0"
+	touch $@
+endif
 
 ifeq ($(K8S_INSTALL),rke2)
 download-ue-image: | $(M)/k8s-ready $(BUILD)/openairinterface
@@ -629,3 +690,13 @@ clean: | roc-clean oaisim-clean router-clean clean-systemd
 	rm -rf $(M)
 endif
 
+ifeq ($(K8S_INSTALL),kubespray)
+clean: | roc-clean oaisim-clean router-clean clean-systemd
+	source "$(VENV)/bin/activate" && cd $(BUILD)/kubespray; \
+	ansible-playbook -b -i inventory/local/hosts.ini reset.yml --extra-vars "reset_confirmation=yes"
+	@if [ -d /usr/local/etc/emulab ]; then \
+		mount | grep /mnt/extra/kubelet/pods | cut -d" " -f3 | sudo xargs umount; \
+		sudo rm -rf /mnt/extra/kubelet; \
+	fi
+	rm -rf $(M)
+endif
