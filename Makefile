@@ -64,7 +64,7 @@ UE_NAT_CONF           := /etc/systemd/system/aiab-ue-nat.service
 # monitoring
 RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd
 RANCHER_MONITORING_CHART     := rancher/rancher-monitoring
-MONITORING_VALUES            ?= $(MAKEDIR)/monitoring.yaml
+MONITORING_VALUES            ?= $(MAKEDIR)/resources/monitoring.yaml
 
 NODE_IP ?= $(shell ip route get 8.8.8.8 | grep -oP 'src \K\S+')
 ifndef NODE_IP
@@ -414,7 +414,7 @@ $(M)/roc: $(M)/helm-ready
 	touch $@
 
 # Load the ROC 4G models.  Disable loading network slice from SimApp.
-roc-4g-models: $(M)/roc
+roc-4g: $(M)/roc
 	sed -i 's/provision-network-slice: true/provision-network-slice: false/' $(4G_CORE_VALUES)
 	sed -i 's/# syncUrl/syncUrl/' $(4G_CORE_VALUES)
 	if [ "${ENABLE_SUBSCRIBER_PROXY}" == "true" ] ; then \
@@ -541,7 +541,7 @@ monitoring-clean:
 	kubectl delete namespace cattle-dashboards cattle-monitoring-system || true
 	rm $(M)/monitoring
 
-omec-clean:
+core-clean:
 	helm delete -n omec $$(helm -n omec ls -qa) || true
 	@echo ""
 	@echo "Wait for all pods to terminate..."

@@ -192,7 +192,7 @@ Working in reverse order, the following Make targets tear down the three applica
 you just installed, restoring the base Kubernetes cluster (plus Quagga router):
 
 ```
-    make omec-clean
+    make core-clean
     make monitoring-clean
     make roc-clean
 ```
