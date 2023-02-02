@@ -17,11 +17,13 @@ complex configurations.
 > running system will be added over time, but in the meantime,
 > the AiaB guide should be consulted for additional information.
 
-// Several "refactoring/cleanup" tasks remain, including (1)
-// treat different versions of Aether (e.g., 2.0 vs 2.1) in a
-// uniform way; (2) find a clean way to deal with ROC models
-// and Monitoring resources (that will also work with Fleet). 
-
+/*:
+	TODO: Several "refactoring/cleanup" tasks remain, including
+	(1) treat different versions of Aether (e.g., 2.0 vs 2.1) in a
+	uniform way; (2) find a clean way to deal with ROC models
+	and Monitoring resources (that will also work with Fleet). 
+/*
+	
 ## Configuration Options
 
 Aether supports several configuration options, but the primary goal
