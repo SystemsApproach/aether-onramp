@@ -12,29 +12,26 @@ Aether OnRamp is derived from [Aether-in-a-Box
 refactored to help users step through a sequence of increasingly
 complex configurations.
 
-> TODO: The current version is mostly focused on how to bring up
-> Aether. Need to augment with guidance on how to interact with the
-> running system, including how to make changes. Much still to be
-> lifted from the AiaB guide.
+> Note: This is a work-in-progress, and right now the focus is mostly
+> on how to bring up Aether. Guidance on how to interact with  a
+> running system will be added over time, but in the meantime,
+> the AiaB guide should be consulted for additional information.
 
-> TODO: Several "refactoring/cleanup" tasks remain, including: (1) strip
-> unused targets and config options from the Makefile and delete them
-> from the repo; and (2) treat different versions of Aether (e.g., 2.0 vs 2.1)
-> in a uniform way.
-
-> TODO: Still need to give a clear description of how to point your browser
-> at the relevant dashboards.
+// Several "refactoring/cleanup" tasks remain, including (1)
+// treat different versions of Aether (e.g., 2.0 vs 2.1) in a
+// uniform way; (2) find a clean way to deal with ROC models
+// and Monitoring resources (that will also work with Fleet). 
 
 ## Configuration Options
 
 Aether supports several configuration options, but the primary goal
 of OnRamp is to prescribe a (mostly) linear sequence of steps a new
 user can follow to bring up an operational system. This document
-also identifies "alternate paths" you can follow, but does not
-document them in detail.
+identifies alternate paths you can follow, but does not document them
+in detail.
 
 With the goal of first learning about Aether, there are two relevant
-questions:
+configuration choices:
 
 * Do you want to bring up a 4G or a 5G network?
 * Do you want to run Aether in a VM or on a physical server?
@@ -52,13 +49,14 @@ complex configurations. These include:
 * Enabling SR-IOV to optimize performance.
 * Scaling from a signal server to multiple servers.
 
-Note that if you don't have access to a physical server, running a VM
-on your laptop will work for the first stage, but you will be limited
-how far you can go in bringing up a live deployment.
+If you don't have access to a physical server, running a VM on your
+laptop will work for the first stage, but you will be limited how far
+you can go in bringing up a live deployment.
 
-Also note that bringing up multiple Aether clusters under the control of
-a centralized management platform is not currently in scope, but it is a
-long-term goal that we will consider in the future.
+> Note: Aether supports hybrid deployments spanning multiple edge
+> sites, but bringing up multiple clusters under the control of a
+> centralized management platform is not currently in scope for OnRamp.
+> However, such configurations will be considered in the future.
 
 ## Stage 1: Bring Up Aether
 
@@ -120,6 +118,7 @@ included. Type:
 ```
     make router-pod
 ```
+
 This target configures Linux (via `systemctl`), but also starts a Quagga
 router running inside the cluster.
 
@@ -151,13 +150,8 @@ You can access the dashboards for the two subsystems, respectively, at
     http://<server-ip>:30950
 ```
 
-> TODO: Should provide a minimal tour of the two dashboards,
-> explaining some of the default values (e.g., AiaB Slice, AiaB Site).
-
-> TODO: Need to find a clean way to deal with ROC models and
-> Monitoring resources (that will also work with Fleet). Might also
-> make sense to combine the two subsystems into a single target
-> (e.g., "make amp").
+// Should provide a minimal tour of the two dashboards,
+// explaining some of the default values (e.g., AiaB Slice, AiaB Site).
 
 ### Bring Up SD-Core
 
@@ -178,9 +172,9 @@ We can now test SD-Core with emulated traffic by typing:
     make 5g-test
 ```
 
-The monitoring dashboard shows two emulated gNBs come online and five
-emulated UEs connect to them. (Click on the "5G Dashboard" once you
-connect to the main page of the monitoring dashboard.)
+The monitoring dashboard shows two emulated gNBs come online, with
+five emulated UEs connecting to them. (Click on the "5G Dashboard"
+once you connect to the main page of the monitoring dashboard.)
 
 This make target can be executed multiple times without restarting the
 SD-Core.  (Note that `5g-test` runs an emulator that directs traffic
@@ -216,8 +210,8 @@ cloned directory (e.g.,`~/aether-onramp/roc-values.yaml`) to override
 the values for the correspond Helm charts. In an operational setting,
 all the information needed to deploy a set of Kubernetes applications
 is checked into a Git repo, with a tool like Fleet automatically
-updating the deployment whenever it detects changes to the configuration
-checked into the repo.
+updating the deployment whenever it detects changes to the
+configuration checked into the repo.
 
 To see how this works, look at the `deploy.yaml` file included in the cloned
 directory:
@@ -245,7 +239,7 @@ to your new repo. Then install Fleet on your Kubernetes cluster by typing:
 ```
 
 Once complete, `kubectl` will show the `cattle-fleet-system` namespace  running.
-All that's left is to type the following command to "activate" Fleet:
+All that's left is to type the following command to activate Fleet:
 
 ```
     kubectl apply -f deploy.yaml
@@ -264,11 +258,10 @@ Once complete, you can rerun the same emulated 5G test against Aether:
     make 5g-test
 ```
 
-Note that once you configure your cluster to use Fleet to deploy the
-Kubernetes applications, the "clean" targets in the Makefile will no
-longer work correctly: Fleet will persist in reinstalling any
-namespaces that have been deleted. You first have to uninstall Fleet
-by typing:
+Once you configure your cluster to use Fleet to deploy the Kubernetes
+applications, the "clean" targets in the Makefile will no longer work
+correctly: Fleet will persist in reinstalling any namespaces that have
+been deleted. You first have to uninstall Fleet by typing:
 
 ```
     make fleet-clean
@@ -276,15 +269,26 @@ by typing:
 
 before executing the other "clean" targets. Alternatively, you can
 modify your forked copy of the `aether-apps` repo to no longer
-include applications you do not want Fleet to instantiate, mimicing
-how an operator would change a deployment by checking in a new
-configuration.
+include applications you do not want Fleet to automatically
+instantiate, mimicing how an operator would change a deployment by
+checking in a new configuration.
 
-> TODO: The set of bundles included in the *aether-apps* repo is not complete.
-> Still need to add missing pieces (e.g., the monitoring subsystem).
+> Note: The set of bundles included in the *aether-apps* repo is not
+> complete. Adding the missing pieces (e.g., the monitoring subsystem)
+> is still work-in-progress.
 
 ## Stage 3: Connect Physical Base Station
+
+> Note: Since 5G small cells are hard to come by, we may want to fall
+> back to a 4G deployment this section (for the time being).
 
 ## Stage 4: Enable SR-IOV
 
 ## Stage5:  Add Servers to the Cluster
+
+## Stage N: Other Upgrades
+
+> Note: We should identify and prioritize other potential upgrades,
+> for example, going from 1 to 2 (or more) base stations; adding a
+> second slice, and so on. Depending on interest, some of these may
+> happen before others listed above.
