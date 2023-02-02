@@ -150,8 +150,9 @@ You can access the dashboards for the two subsystems, respectively, at
     http://<server-ip>:30950
 ```
 
-// Should provide a minimal tour of the two dashboards,
-// explaining some of the default values (e.g., AiaB Slice, AiaB Site).
+<!--- Should provide a minimal tour of the two dashboards,
+   explaining some of the default values (e.g., AiaB Slice,
+   AiaB Site).-->
 
 ### Bring Up SD-Core
 
