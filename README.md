@@ -48,6 +48,7 @@ complex configurations. These include:
 * Connecting a physical base station.
 * Enabling SR-IOV to optimize performance.
 * Scaling from a signal server to multiple servers.
+* Integrating with SD-RAN
 
 If you don't have access to a physical server, running a VM on your
 laptop will work for the first stage, but you will be limited how far
@@ -287,9 +288,22 @@ checking in a new configuration.
 
 ## Stage5:  Add Servers to the Cluster
 
+## Stage 6: Integrate with SD-RAN
+
+> Note: The default Aether deployment includes SD-Core but not SD-RAN,
+> with the latter currently deployed as a separate package, called
+> [SDRAN-in-a-Box (RiaB)](https://docs.sd-ran.org/master/sdran-in-a-box/README.html).
+> Complete integration will be challenging, but there is significant
+> duplication that can be eliminated, and end-to-end tests should be
+> possible.
+
 ## Stage N: Other Upgrades
 
 > Note: We should identify and prioritize other potential upgrades,
 > for example, going from 1 to 2 (or more) base stations; adding a
 > second slice, and so on. Depending on interest, some of these may
 > happen before others listed above.
+
+> Note: The order of the above set should be revisited once we have a
+> better sense of interests and priorities.
+
