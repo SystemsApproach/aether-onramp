@@ -47,8 +47,8 @@ complex configurations. These include:
 * Enabling GitOps deployment tools.
 * Connecting a physical base station.
 * Enabling SR-IOV to optimize performance.
-* Scaling from a signal server to multiple servers.
-* Integrating with SD-RAN
+* Scaling the system in multiple dimensions.
+* Integrating with SD-RAN.
 
 If you don't have access to a physical server, running a VM on your
 laptop will work for the first stage, but you will be limited how far
@@ -286,7 +286,12 @@ checking in a new configuration.
 
 ## Stage 4: Enable SR-IOV
 
-## Stage5:  Add Servers to the Cluster
+> Note: This, and possibly other optimizations.
+
+## Stage5:  Scaling Up Aether
+
+> Note: There are mutiple dimensions here, including: (a) adding servers;
+> (b) adding slices; and (c) adding base stations.
 
 ## Stage 6: Integrate with SD-RAN
 
@@ -297,13 +302,9 @@ checking in a new configuration.
 > duplication that can be eliminated, and end-to-end tests should be
 > possible.
 
-## Stage N: Other Upgrades
+## Stage N: Other Features
 
 > Note: We should identify and prioritize other potential upgrades,
-> for example, going from 1 to 2 (or more) base stations; adding a
-> second slice, and so on. Depending on interest, some of these may
-> happen before others listed above.
+> and depending on interest, prioritize these and the above list.
 
-> Note: The order of the above set should be revisited once we have a
-> better sense of interests and priorities.
 
