@@ -148,7 +148,7 @@ You can access the dashboards for the two subsystems, respectively, at
 
 ```
     http://<server_ip>:31194
-    http://<server-ip>:30950
+    http://<server_ip>:30950
 ```
 
 <!--- Should provide a minimal tour of the two dashboards,
@@ -214,6 +214,10 @@ all the information needed to deploy a set of Kubernetes applications
 is checked into a Git repo, with a tool like Fleet automatically
 updating the deployment whenever it detects changes to the
 configuration checked into the repo.
+
+> Note: There is an intermediate step that could be included. First
+> use "fleet apply" locally, and then engage Fleet in the GitOps-style
+> via a remote GitHub repo.
 
 To see how this works, look at the `deploy.yaml` file included in the cloned
 directory:
