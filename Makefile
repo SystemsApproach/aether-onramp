@@ -576,6 +576,7 @@ $(M)/fleet-ready: $(M)/helm-ready
 		--create-namespace \
 		fleet \
 		https://github.com/rancher/fleet/releases/download/v0.5.0/fleet-0.5.0.tgz
+	kubectl apply -f resources/deploy.yaml
 	touch $(M)/fleet-ready
 
 fleet-clean:
