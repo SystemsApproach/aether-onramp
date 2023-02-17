@@ -1,0 +1,223 @@
+# Copyright 2018-present Open Networking Foundation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+#
+# TBD whether to include these 4G-related Targets
+#
+
+OAISIM_VALUES        ?= $(MAKEDIR)/oaisim-values.yaml
+
+OAISIM_UE_IMAGE ?= andybavier/lte-uesoftmodem:1.1.0-$(shell uname -r)
+ENABLE_OAISIM ?= true
+
+ONECLOUD	?= false
+
+
+
+# UE images includes kernel module, ue_ip.ko
+# which should be built in the exactly same kernel version of the host machine
+$(BUILD)/openairinterface: | $(M)/setup
+	mkdir -p $(BUILD)
+	cd $(BUILD); git clone https://github.com/opencord/openairinterface.git
+
+oaisim-standalone: | $(M)/helm-ready $(M)/ue-image $(LO_NETCONF)
+	sudo systemctl restart systemd-networkd
+	@ip link show $(DATA_IFACE) > /dev/null || (echo DATA_IFACE is not set or does not exist; exit 1)
+	@if [[ "${MME_IP}" == "" ]]; then \
+	        echo MME_IP is not set; \
+	        exit 1; \
+	else \
+	        ping -c 3 $(MME_IP) > /dev/null || (echo MME $(MME_IP) is not reachable; exit 1) \
+	fi
+	sudo ip route add 192.168.252.0/24 via $(MME_IP)
+	helm repo update
+	helm upgrade --create-namespace --install $(HELM_GLOBAL_ARGS) --namespace omec oaisim cord/oaisim -f $(OAISIM_VALUES) \
+	        --set config.enb.networks.s1u.interface=$(DATA_IFACE) \
+	        --set config.enb.networks.s1_mme.interface=$(DATA_IFACE) \
+	        --set config.enb.mme.address=$(MME_IP) \
+	        --set config.enb.mme.isLocal=false \
+	        --set images.pullPolicy=IfNotPresent
+	kubectl rollout status -n omec statefulset ue
+	@echo "Test: registration"
+	@timeout 60s bash -c \
+	"until ip addr show oip1 | grep -q inet; \
+	do \
+	        echo 'Waiting for UE 1 gets IP address'; \
+	        sleep 3; \
+	done"
+	@echo "Test: ping from UE to 8.8.8.8"
+	ping -I oip1 8.8.8.8 -c 3
+	@touch $(M)/oaisim $(M)/omec
+
+oaisim: | $(M)/oaisim
+$(M)/oaisim: | $(M)/ue-image $(M)/router-pod $(OAISIM_NETCONF)
+	sudo systemctl restart systemd-networkd
+	sleep 1
+	helm upgrade --create-namespace --install $(HELM_GLOBAL_ARGS) --namespace omec oaisim cord/oaisim -f $(OAISIM_VALUES) \
+		--set images.pullPolicy=IfNotPresent
+	kubectl rollout status -n omec statefulset ue
+	@timeout 60s bash -c \
+	"until ip addr show oip1 | grep -q inet; \
+	do \
+		echo 'Waiting for UE 1 gets IP address'; \
+		sleep 3; \
+	done"
+	touch $@
+
+enodebd:
+	helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
+		--namespace=aether-apps \
+		--create-namespace \
+		enodebd \
+		${ENODEBD_CHART}
+	touch $(M)/enodebd
+
+enodebd-clean:
+	helm -n aether-apps delete enodebd || true
+	rm $(M)/enodebd
+
+
+oaisim-clean: reset-ue
+	@sudo ip addr del 127.0.0.2/8 dev lo 2>/dev/null || true
+	@sudo ip link del enb 2>/dev/null || true
+	@sudo ip route del 192.168.252.0/24 || true
+	@cd $(M); rm -f oaisim-lo
+
+4g-test: test
+test: | 4g-core $(M)/oaisim
+	@sleep 5
+	@echo "Test1: ping from UE to SGI network gateway"
+	ping -I oip1 192.168.250.1 -c 15
+	@if [ "${PROXY_ENABLED}" == "false" ] ; then \
+		@echo "Test2: ping from UE to 8.8.8.8" ; \
+		ping -I oip1 8.8.8.8 -c 3 ; \
+		@echo "Test3: ping from UE to google.com" ; \
+		ping -I oip1 google.com -c 3 ; \
+	fi
+	@echo "Finished to test"
+
+reset-ue:
+	helm delete -n omec oaisim || true
+	kubectl wait -n omec --for=delete pod enb-0 || true
+	kubectl wait -n omec --for=delete pod ue-0 || true
+	cd $(M); rm -f oaisim
+
+refresh-4g: reset-ue
+	kubectl -n omec delete pod mme-0
+	kubectl wait -n omec --for='condition=ready' pod mme-0 --timeout=300s
+
+reset-test: | oaisim-clean omec-clean router-clean
+	@cd $(M); rm -f omec oaisim 5g-core
+
+ifeq ($(K8S_INSTALL),kubespray)
+download-ue-image: | $(M)/k8s-ready $(BUILD)/openairinterface
+	sg docker -c "docker pull ${OAISIM_UE_IMAGE} && \
+		docker tag ${OAISIM_UE_IMAGE} omecproject/lte-uesoftmodem:1.1.0"
+	touch $(M)/ue-image
+
+$(M)/ue-image: | $(M)/k8s-ready $(BUILD)/openairinterface
+	cd $(BUILD)/openairinterface; \
+	sg docker -c "docker build . --target lte-uesoftmodem \
+		--network=host \
+		--build-arg http_proxy=$(HTTP_PROXY)/ \
+		--build-arg build_base=omecproject/oai-base:1.1.0 \
+		--file Dockerfile.ue \
+		--tag omecproject/lte-uesoftmodem:1.1.0"
+	touch $@
+endif
+
+ifeq ($(K8S_INSTALL),rke2)
+download-ue-image: | $(M)/k8s-ready $(BUILD)/openairinterface
+	sg docker -c "docker pull ${OAISIM_UE_IMAGE} && \
+		docker tag ${OAISIM_UE_IMAGE} omecproject/lte-uesoftmodem:1.1.0 && \
+		docker save -o /tmp/lte-uesoftmodem.tar omecproject/lte-uesoftmodem:1.1.0"
+	$(CTR_CMD) images import /tmp/lte-uesoftmodem.tar
+	touch $(M)/ue-image
+
+$(M)/ue-image: $(M)/k8s-ready $(BUILD)/openairinterface
+	cd $(BUILD)/openairinterface; \
+	sg docker -c "docker build . --target lte-uesoftmodem \
+		--network=host \
+		--build-arg http_proxy=$(HTTP_PROXY)/ \
+		--build-arg build_base=omecproject/oai-base:1.1.0 \
+		--file Dockerfile.ue \
+		--tag omecproject/lte-uesoftmodem:1.1.0 && \
+		docker save -o /tmp/lte-uesoftmodem.tar omecproject/lte-uesoftmodem:1.1.0"
+	$(CTR_CMD) images import /tmp/lte-uesoftmodem.tar
+	touch $@
+endif
+
+#
+# TBD whether to include these Kubespray-related Targets
+#
+
+KUBESPRAY_VERSION ?= release-2.17
+
+ifeq ($(K8S_INSTALL),kubespray)
+$(M)/setup: | $(M) $(M)/interface-check
+	sudo $(SCRIPTDIR)/cloudlab-disksetup.sh
+	sudo apt update; sudo apt install -y software-properties-common python3 python3-pip python3-venv jq httpie ipvsadm
+	touch $@
+endif
+
+$(BUILD)/kubespray: | $(M)/setup
+	mkdir -p $(BUILD)
+	cd $(BUILD); git clone https://github.com/kubernetes-incubator/kubespray.git -b $(KUBESPRAY_VERSION)
+
+
+$(M)/kubespray-requirements: $(BUILD)/kubespray | $(VENV)/bin/activate
+	source "$(VENV)/bin/activate" && \
+	pip install -r $(BUILD)/kubespray/requirements.txt
+	touch $@
+
+
+ifeq ($(K8S_INSTALL),kubespray)
+$(M)/k8s-ready: | $(M)/setup $(BUILD)/kubespray $(VENV)/bin/activate $(M)/kubespray-requirements
+	source "$(VENV)/bin/activate" && cd $(BUILD)/kubespray; \
+	ansible-playbook -b -i inventory/local/hosts.ini \
+		-e "{'http_proxy' : $(HTTP_PROXY)}" \
+		-e "{'https_proxy' : $(HTTPS_PROXY)}" \
+		-e "{'no_proxy' : $(NO_PROXY)}" \
+		-e "{'override_system_hostname' : False, 'disable_swap' : True}" \
+		-e "{'docker_version' : $(DOCKER_VERSION)}" \
+		-e "{'docker_iptables_enabled' : True}" \
+		-e "{'kube_version' : $(K8S_VERSION)}" \
+		-e "{'kube_network_plugin_multus' : True, 'multus_version' : stable, 'multus_cni_version' : 0.3.1}" \
+		-e "{'kube_proxy_metrics_bind_address' : 0.0.0.0:10249}" \
+		-e "{'kube_pods_subnet' : 192.168.84.0/24, 'kube_service_addresses' : 192.168.85.0/24}" \
+		-e "{'kube_apiserver_node_port_range' : 2000-36767}" \
+		-e "{'kubeadm_enabled': True}" \
+		-e "{'kube_feature_gates' : [SCTPSupport=True]}" \
+		-e "{'kubelet_custom_flags' : [--allowed-unsafe-sysctls=net.*, --node-ip=$(NODE_IP)]}" \
+		-e "{'dns_min_replicas' : 1}" \
+		-e "{'helm_enabled' : True, 'helm_version' : $(HELM_VERSION)}" \
+		cluster.yml
+	mkdir -p $(HOME)/.kube
+	sudo cp -f /etc/kubernetes/admin.conf $(HOME)/.kube/config
+	sudo chown $(shell id -u):$(shell id -g) $(HOME)/.kube/config
+	kubectl wait pod -n kube-system --for=condition=Ready --all
+	sudo adduser $(USER) docker
+	touch $@
+
+$(M)/helm-ready: | $(M)/k8s-ready
+	helm repo add incubator https://charts.helm.sh/incubator
+	helm repo add cord https://charts.opencord.org
+	helm repo add atomix https://charts.atomix.io
+	helm repo add onosproject https://charts.onosproject.org
+	helm repo add aether https://charts.aetherproject.org
+	helm repo add rancher http://charts.rancher.io/
+	touch $@
+endif
+
+
+ifeq ($(K8S_INSTALL),kubespray)
+clean: | roc-clean oaisim-clean router-clean clean-systemd
+	source "$(VENV)/bin/activate" && cd $(BUILD)/kubespray; \
+	ansible-playbook -b -i inventory/local/hosts.ini reset.yml --extra-vars "reset_confirmation=yes"
+	@if [ -d /usr/local/etc/emulab ]; then \
+		mount | grep /mnt/extra/kubelet/pods | cut -d" " -f3 | sudo xargs umount; \
+		sudo rm -rf /mnt/extra/kubelet; \
+	fi
+	rm -rf $(M)
+endif
