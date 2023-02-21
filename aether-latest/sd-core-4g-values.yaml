@@ -4,6 +4,8 @@
 
 omec-control-plane:
   enable4G: true
+  images:
+    repository: "registry.opennetworking.org/docker.io/"
   # cassandra values
   cassandra:
     config:
@@ -15,7 +17,7 @@ omec-control-plane:
   config:
     managedByConfigPod:
       enabled: true
-      # syncUrl: http://sdcore-adapter-v4.aether-roc.svc:8080/synchronize
+      # syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
     config4g:
       deploy: true
     hss:
@@ -36,6 +38,8 @@ omec-control-plane:
 
 omec-sub-provision:
   enable: true
+  images:
+    repository: "registry.opennetworking.org/docker.io/"
   config:
     simapp:
       cfgFiles:
@@ -43,8 +47,10 @@ omec-sub-provision:
           configuration:
             provision-network-slice: true
             sub-provision-endpt:
-              addr: config4g
-              port: 5000
+              addr: config4g.omec.svc.cluster.local
+            # sub-proxy-endpt:
+            #   addr: subscriber-proxy.aether-roc.svc.cluster.local
+            #   port: 5000
             subscribers:
             - ueId-start: 208010167891201
               ueId-end: 208010167891211
@@ -101,26 +107,31 @@ omec-sub-provision:
 
 omec-user-plane:
   enable: true
+  images:
+    repository: "registry.opennetworking.org/docker.io/"
   resources:
     enabled: false
-
   config:
     upf:
-      name: "oaisim"
       sriov:
         enabled: false
       hugepage:
         enabled: false
-      cniPlugin: simpleovs
+      cniPlugin: macvlan
       ipam: static
+      routes:
+        - to: ${NODE_IP}
+          via: 169.254.1.1
+      enb:
+        subnet: ${RAN_SUBNET}
+      access:
+        iface: ${DATA_IFACE}
+      core:
+        iface: ${DATA_IFACE}
       cfgFiles:
         upf.json:
           mode: af_packet
-          cpiface:
-            dnn: "internet"
-            hostname: "upf"
-            enable_ue_ip_alloc: false
-            ue_ip_pool: 172.250.0.0/16
+          hwcksum: true
 
 5g-control-plane:
   enable5G: false

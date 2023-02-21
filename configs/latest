@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+# For installing the Core
 SD_CORE_CHART            := aether/sd-core
 
 # For installing the ROC
@@ -13,3 +14,17 @@ ONOS_OPERATOR_CHART       := onosproject/onos-operator
 
 # For installing the applications
 ENODEBD_CHART             := aether/enodebd
+
+# For installing monitoring
+RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd
+RANCHER_MONITORING_CHART     := rancher/rancher-monitoring
+
+# Helm Value Overrides and other Config Files
+ROC_VALUES     := $(MAKEDIR)/aether-latest/roc-values.yaml 
+ROC_DEFAULTENT_MODEL := $(MAKEDIR)/aether-latest/roc-defaultent-model.json 
+ROC_4G_MODELS  := $(MAKEDIR)/aether-latest/roc-4g-models.json 
+ROC_5G_MODELS  := $(MAKEDIR)/aether-latest/roc-5g-models.json 
+4G_CORE_VALUES := $(MAKEDIR)/aether-latest/sd-core-4g-values.yaml 
+5G_CORE_VALUES := $(MAKEDIR)/aether-latest/sd-core-5g-values.yaml 
+TEST_APP_VALUES := $(MAKEDIR)/aether-latest/5g-test-apps-values.yaml 
+MONITORING_VALUES := $(MAKEDIR)/aether-latest/monitoring.yaml

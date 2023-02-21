@@ -10,6 +10,12 @@ include ./mk/*.mk
 $(M):
 	mkdir -p $(M)
 
+cpu_family	:= $(shell lscpu | grep 'CPU family:' | awk '{print $$3}')
+cpu_model	:= $(shell lscpu | grep 'Model:' | awk '{print $$2}')
+os_vendor	:= $(shell lsb_release -i -s)
+os_release	:= $(shell lsb_release -r -s)
+USER		:= $(shell whoami)
+
 $(M)/system-check: | $(M)
 	@if [[ $(cpu_family) -eq 6 ]]; then \
 		if [[ $(cpu_model) -lt 60 ]]; then \
