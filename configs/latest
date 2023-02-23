@@ -12,7 +12,7 @@ ATOMIX_RAFT_STORAGE_CHART := atomix/atomix-raft-storage
 ATOMIX_RUNTIME_CHART      := atomix/atomix-runtime --version 0.1.9  # v0.2.0 not working
 ONOS_OPERATOR_CHART       := onosproject/onos-operator
 
-# For installing the applications
+# For installing the eNB config application
 ENODEBD_CHART             := aether/enodebd
 
 # For installing monitoring
