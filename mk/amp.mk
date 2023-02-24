@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-AMP_PHONY := roc roc-4g roc-5g roc-clean monitoring monitoring-4g monitoring-5g monitoring-clean
+AMP_PHONY := roc 4g-roc 5g-roc roc-clean monitoring 4g-monitoring 5g-monitoring monitoring-clean
 
 roc: $(M)/roc
 $(M)/roc: $(M)/helm-ready
@@ -40,7 +40,7 @@ $(M)/roc: $(M)/helm-ready
 	touch $@
 
 # Load the ROC 4G models.  Disable loading network slice from SimApp.
-roc-4g: $(M)/roc
+4g-roc: $(M)/roc
 	sed -i 's/provision-network-slice: true/provision-network-slice: false/' $(4G_CORE_VALUES)
 	sed -i 's/# syncUrl/syncUrl/' $(4G_CORE_VALUES)
 	if [ "${ENABLE_SUBSCRIBER_PROXY}" == "true" ] ; then \
@@ -64,7 +64,7 @@ roc-4g: $(M)/roc
 		--data-raw "$$(cat ${ROC_4G_MODELS})"; do sleep 5; done
 
 # Load the ROC 5G models.  Disable loading network slice from SimApp.
-roc-5g: $(M)/roc
+5g-roc: $(M)/roc
 	sed -i 's/provision-network-slice: true/provision-network-slice: false/' $(5G_CORE_VALUES)
 	sed -i 's/# syncUrl/syncUrl/' $(5G_CORE_VALUES)
 	if [ "${ENABLE_SUBSCRIBER_PROXY}" == "true" ] ; then \
@@ -119,12 +119,12 @@ $(M)/monitoring: $(M)/helm-ready
 		$(RANCHER_MONITORING_CHART)
 	touch $(M)/monitoring
 
-monitoring-4g: $(M)/monitoring
+4g-monitoring: $(M)/monitoring
 	kubectl create namespace omec || true
 	kubectl create namespace cattle-dashboards || true
 	kubectl apply -k resources/4g-monitoring
 
-monitoring-5g: $(M)/monitoring
+5g-monitoring: $(M)/monitoring
 	kubectl create namespace omec || true
 	kubectl create namespace cattle-dashboards || true
 	kubectl apply -k resources/5g-monitoring

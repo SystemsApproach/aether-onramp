@@ -190,13 +190,13 @@ router-clean:
 	@cd $(M); rm -f router-pod router-host
 
 
-clean-systemd:
+systemd-clean:
 	cd /etc/systemd/network && sudo rm -f 10-aiab* 20-aiab* */macvlan.conf
 	cd /etc/systemd/system && sudo rm -f aiab*.service && sudo systemctl daemon-reload
 
 
 ifeq ($(K8S_INSTALL),rke2)
-clean: | roc-clean router-clean clean-systemd
+clean: | roc-clean monitoring-clean router-clean systemd-clean
 	sudo /usr/local/bin/rke2-uninstall.sh || true
 	sudo rm -rf /usr/local/bin/kubectl
 	rm -rf $(M)
