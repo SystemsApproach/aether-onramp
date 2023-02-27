@@ -2,25 +2,26 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# For installing the Core
+# 
+# Warning:  Version numbers still need to be validated
+#
+
+# Charts for installing SD-Core
 SD_CORE_CHART            := aether/sd-core --version 0.12.5
 
-# Was copied from latest.
-# Need to include 2.1-specific Chart version numbers
-
-# For installing the ROC
+# Charts for installing ROC
 AETHER_ROC_UMBRELLA_CHART := aether/aether-roc-umbrella --version 2.1.32
 ATOMIX_RUNTIME_CHART      := atomix/atomix-runtime --version 0.1.9
 ONOS_OPERATOR_CHART       := onosproject/onos-operator --version 0.5.6
 
-# For installing the eNB config application
+# Charts for installing the eNB config application
 ENODEBD_CHART             := aether/enodebd
 
-# For installing monitoring
-RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd
-RANCHER_MONITORING_CHART     := rancher/rancher-monitoring --version 100.1.3+up19.0.3
+# Charts for installing Monitoring subsystem
+RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd --version 101.0.0+up19.0.3
+RANCHER_MONITORING_CHART     := rancher/rancher-monitoring --version 101.0.0+up19.0.3
 
-# Config files to use 
+# Value override and other config files
 ROC_VALUES     := $(MAKEDIR)/aether-2.1/roc-values.yaml 
 ROC_DEFAULTENT_MODEL := $(MAKEDIR)/aether-2.1/roc-defaultent-model.json 
 ROC_4G_MODELS  := $(MAKEDIR)/aether-2.1/roc-4g-models.json 
