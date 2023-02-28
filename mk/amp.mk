@@ -133,4 +133,4 @@ monitoring-clean:
 	helm -n cattle-monitoring-system delete rancher-monitoring || true
 	helm -n cattle-monitoring-system delete rancher-monitoring-crd || true
 	kubectl delete namespace cattle-dashboards cattle-monitoring-system || true
-	rm $(M)/monitoring
+	rm -rf $(M)/monitoring
