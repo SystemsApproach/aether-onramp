@@ -1,7 +1,7 @@
 apiVersion: fleet.cattle.io/v1alpha1
 kind: GitRepo
 metadata:
-  name: aiab
+  name: aether
   namespace: fleet-local
 spec:
   repo: "https://github.com/systemsapproach/aether-apps"	# Replace with your fork
