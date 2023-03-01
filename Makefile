@@ -140,6 +140,7 @@ $(M)/helm-ready: | $(M)/k8s-ready
 	helm repo add onosproject https://charts.onosproject.org
 	helm repo add aether https://charts.aetherproject.org
 	helm repo add rancher http://charts.rancher.io/
+	rm -f ${GET_HELM}
 	touch $@
 endif
 

@@ -100,8 +100,7 @@ roc-clean:
 	sed -i 's/    addr: sub/  #   addr: sub/' $(5G_CORE_VALUES)
 	sed -i 's/    port: 5000/  #   port: 5000/' $(5G_CORE_VALUES)
 	kubectl delete namespace aether-roc || true
-	rm -rf $(M)/roc
-	rm -f ${GET_HELM}
+	rm -f $(M)/roc
 
 monitoring: $(M)/monitoring
 $(M)/monitoring: $(M)/helm-ready
@@ -133,4 +132,4 @@ monitoring-clean:
 	helm -n cattle-monitoring-system delete rancher-monitoring || true
 	helm -n cattle-monitoring-system delete rancher-monitoring-crd || true
 	kubectl delete namespace cattle-dashboards cattle-monitoring-system || true
-	rm -rf $(M)/monitoring
+	rm -f $(M)/monitoring
