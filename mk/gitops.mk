@@ -16,11 +16,10 @@ $(M)/fleet-ready: $(M)/helm-ready
 		--create-namespace \
 		fleet \
 		https://github.com/rancher/fleet/releases/download/v0.5.0/fleet-0.5.0.tgz
-	kubectl apply -f resources/deploy.yaml
 	touch $(M)/fleet-ready $(M)/5g-core
 
 fleet-clean:
 	helm -n cattle-fleet-system delete fleet || true
 	helm -n cattle-fleet-system delete fleet-crd || true
 	kubectl delete namespace cattle-fleet-system || true
-	rm $(M)/fleet-ready $(M)/5g-core
+	rm -f $(M)/fleet-ready $(M)/5g-core
