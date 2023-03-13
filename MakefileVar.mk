@@ -33,8 +33,6 @@ HTTP_PROXY      ?= ${http_proxy}
 HTTPS_PROXY     ?= ${https_proxy}
 NO_PROXY        ?= ${no_proxy}
 
-MME_IP  ?=
-
 HELM_GLOBAL_ARGS ?=
 
 # Allow installing local charts or specific versions of published charts.

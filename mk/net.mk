@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 # This approach to network configuration is derived from AiaB
-# Target "router-pod" is used when the RAN elements are emulated
-# Target "router-host" is used when connecting to an external gNB
+# Target "router-pod" is used when the RAN is emulated
+# Target "router-host" is used when using external gNB
 #
 # Main Makefile depends on "interface-check"
 # SD-Core Makefile depends on "router-pod" or "router-host"

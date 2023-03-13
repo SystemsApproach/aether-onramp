@@ -13,6 +13,7 @@ ENABLE_OAISIM ?= true
 
 ONECLOUD	?= false
 
+MME_IP  ?=
 
 
 # UE images includes kernel module, ue_ip.ko
