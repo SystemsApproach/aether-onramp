@@ -5,7 +5,7 @@
 include ./MakefileVar.mk
 include ./mk/*.mk
 
-.PHONY: $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) node-prep clean router-pod router-host router-clean
+.PHONY: $(NET_PHONY) $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) node-prep clean
 
 $(M):
 	mkdir -p $(M)
@@ -39,20 +39,6 @@ $(M)/system-check: | $(M)
 	else \
 		echo "FAIL: unsupported OS."; \
 		exit 1; \
-	fi
-	touch $@
-
-
-$(M)/interface-check: | $(M)
-ifeq ($(DATA_IFACE_CONF), .d)
-	@echo
-	@echo FATAL: Could not find systemd-networkd config for interface $(DATA_IFACE), exiting now!; exit 1
-endif
-	@echo "Add network configuration for enb interface"
-	@if [[ "${ONECLOUD}" ==  "true" ]]; then \
-		sudo cp netplan/01-enb-static-config.yaml /etc/netplan ; \
-		sudo netplan apply ; \
-		sleep 1 ; \
 	fi
 	touch $@
 
@@ -155,49 +141,8 @@ endif
 node-prep: | $(M)/helm-ready /opt/cni/bin/static
 
 
-router-pod: | $(M)/router-pod
-$(M)/router-pod: $(ROUTER_POD_NETCONF)
-	sudo systemctl restart systemd-networkd
-	DATA_IFACE=$(DATA_IFACE) envsubst < $(RESOURCEDIR)/router.yaml | kubectl apply -f -
-	kubectl wait pod -n default --for=condition=Ready -l app=router --timeout=300s
-	@touch $@
-
-
-$(M)/router-host: $(ROUTER_HOST_NETCONF) $(UE_NAT_CONF)
-	sudo systemctl daemon-reload
-	sudo systemctl enable aiab-ue-nat.service
-	sudo systemctl start aiab-ue-nat.service
-	sudo systemctl restart systemd-networkd
-	$(eval oiface := $(shell ip route list default | awk -F 'dev' '{ print $$2; exit }' | awk '{ print $$1 }'))
-	@touch $@
-
-
-/etc/systemd/%:
-	@sudo mkdir -p $(@D)
-	@sed 's/DATA_IFACE/$(DATA_IFACE)/g' $(MAKEDIR)/systemd/$(@F) > /tmp/$(@F)
-	@sudo cp /tmp/$(@F) $@
-	echo "Installed $@"
-
-
-router-clean:
-	@kubectl delete net-attach-def router-net 2>/dev/null || true
-	@kubectl delete po router 2>/dev/null || true
-	kubectl wait --for=delete -l app=router pod --timeout=180s 2>/dev/null || true
-	sudo ip link del access || true
-	sudo ip link del core || true
-	$(eval oiface := $(shell ip route list default | awk -F 'dev' '{ print $$2; exit }' | awk '{ print $$1 }'))
-	sudo iptables -t nat -D POSTROUTING -s 172.250.0.0/16 -o $(oiface) -j MASQUERADE || true
-	@sudo ip link del data 2>/dev/null || true
-	@cd $(M); rm -f router-pod router-host
-
-
-systemd-clean:
-	cd /etc/systemd/network && sudo rm -f 10-aiab* 20-aiab* */macvlan.conf
-	cd /etc/systemd/system && sudo rm -f aiab*.service && sudo systemctl daemon-reload
-
-
 ifeq ($(K8S_INSTALL),rke2)
-clean: | roc-clean monitoring-clean router-clean systemd-clean
+clean: | roc-clean monitoring-clean core-clean router-clean
 	sudo /usr/local/bin/rke2-uninstall.sh || true
 	sudo rm -rf /usr/local/bin/kubectl
 	rm -rf $(M)
