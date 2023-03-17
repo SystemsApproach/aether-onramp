@@ -9,7 +9,7 @@
 # Main Makefile depends on "interface-check"
 # SD-Core Makefile depends on "router-pod" or "router-host"
 
-NET_PHONY :=  router-pod router-host router-clean
+NET_PHONY :=  net-prep router-pod router-host net-clean
 
 
 DATA_IFACE ?= data
@@ -47,6 +47,18 @@ endif
 	fi
 	touch $@
 
+net-prep: node-prep
+ifeq ($(ENABLE_ROUTER),true)
+ifeq ($(ENABLE_GNBSIM),true)
+net-prep: $(M)/router-pod
+else
+net-prep: $(M)/router-host
+endif
+endif
+net-prep: $(M)/net-prep
+$(M)/net-prep:
+	touch $@
+
 
 router-pod: | $(M)/router-pod
 $(M)/router-pod: $(ROUTER_POD_NETCONF)
@@ -72,7 +84,7 @@ $(M)/router-host: $(ROUTER_HOST_NETCONF) $(UE_NAT_CONF)
 	echo "Installed $@"
 
 
-router-clean:
+net-clean:
 	@kubectl delete net-attach-def router-net 2>/dev/null || true
 	@kubectl delete po router 2>/dev/null || true
 	kubectl wait --for=delete -l app=router pod --timeout=180s 2>/dev/null || true
@@ -83,4 +95,4 @@ router-clean:
 	@sudo ip link del data 2>/dev/null || true
 	cd /etc/systemd/network && sudo rm -f 10-aiab* 20-aiab* */macvlan.conf
 	cd /etc/systemd/system && sudo rm -f aiab*.service && sudo systemctl daemon-reload
-	@cd $(M); rm -f router-pod router-host
+	@cd $(M); rm -f router-pod router-host net-prep

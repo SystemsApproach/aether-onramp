@@ -5,15 +5,8 @@
 CORE_PHONY := 4g-core 5g-core core-clean
 
 4g-core: node-prep
-ifeq ($(ENABLE_ROUTER),true)
-ifeq ($(ENABLE_OAISIM),true)
-4g-core: $(M)/router-pod
-else
-4g-core: $(M)/router-host
-endif
-endif
-4g-core: $(M)/omec
-$(M)/omec:
+4g-core: $(M)/4g-core
+$(M)/4g-core:
 	@if [[ "${CHARTS}" == "local" || "${CHARTS}" == "local-sdcore" ]]; then \
 		helm dep up $(SD_CORE_CHART); \
 	else \
@@ -31,14 +24,7 @@ $(M)/omec:
 	fi
 	@touch $@
 
-5g-core: node-prep
-ifeq ($(ENABLE_ROUTER),true)
-ifeq ($(ENABLE_GNBSIM),true)
-5g-core: $(M)/router-pod
-else
-5g-core: $(M)/router-host
-endif
-endif
+5g-core: net-prep
 5g-core: $(M)/5g-core
 $(M)/5g-core:
 	@if [[ "${CHARTS}" == "local" || "${CHARTS}" == "local-sdcore" ]]; then \
@@ -59,7 +45,7 @@ core-clean:
 	@echo ""
 	@echo "Wait for all pods to terminate..."
 	kubectl wait -n omec --for=delete --all=true -l app!=ue pod --timeout=180s || true
-	cd $(M); rm -f 5g-core
+	cd $(M); rm -f *-core
 
 #
 # Include testing targets for 5G only (assume 4G core with physical radios)
