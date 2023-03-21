@@ -1,11 +1,11 @@
 {
-    "default-target": "aiab-enterprise",
+    "default-target": "aether-enterprise",
     "Updates": {
         "site-2.1.0": [
             {
-                "description": "AiaB test site",
-                "display-name": "AiaB site",
-                "site-id": "aiab-site",
+                "description": "Aether Test Site",
+                "display-name": "Aether Site",
+                "site-id": "aether-site",
                 "imsi-definition": {
                     "mcc": "208",
                     "mnc": "93",
@@ -19,229 +19,90 @@
                 },
                 "device": [
                     {
-                        "device-id": "aiab-ue-1",
+                        "device-id": "aether-ue-1",
                         "display-name": "UE 1",
-                        "sim-card": "aiab-sim-1"
+                        "sim-card": "aether-sim-1"
                     },
                     {
-                        "device-id": "aiab-ue-2",
+                        "device-id": "aether-ue-2",
                         "display-name": "UE 2",
-                        "sim-card": "aiab-sim-2"
+                        "sim-card": "aether-sim-2"
                     },
                     {
-                        "device-id": "aiab-ue-3",
+                        "device-id": "aether-ue-3",
                         "display-name": "UE 3",
-                        "sim-card": "aiab-sim-3"
+                        "sim-card": "aether-sim-3"
                     },
                     {
-                        "device-id": "aiab-ue-4",
+                        "device-id": "aether-ue-4",
                         "display-name": "UE 4",
-                        "sim-card": "aiab-sim-4"
+                        "sim-card": "aether-sim-4"
                     },
                     {
-                        "device-id": "aiab-ue-5",
+                        "device-id": "aether-ue-5",
                         "display-name": "UE 5",
-                        "sim-card": "aiab-sim-5"
-                    },
-                    {
-                        "device-id": "aiab-ue-6",
-                        "display-name": "UE 6",
-                        "sim-card": "aiab-sim-6"
-                    },
-                    {
-                        "device-id": "aiab-ue-7",
-                        "display-name": "UE 7",
-                        "sim-card": "aiab-sim-7"
-                    },
-                    {
-                        "device-id": "aiab-ue-8",
-                        "display-name": "UE 8",
-                        "sim-card": "aiab-sim-8"
-                    },
-                    {
-                        "device-id": "aiab-ue-9",
-                        "display-name": "UE 9",
-                        "sim-card": "aiab-sim-9"
-                    },
-                    {
-                        "device-id": "aiab-ue-10",
-                        "display-name": "UE 10",
-                        "sim-card": "aiab-sim-10"
-                    },
-                    {
-                        "device-id": "aiab-ue-11",
-                        "display-name": "UE 11",
-                        "sim-card": "aiab-sim-11"
-                    },
-                    {
-                        "device-id": "aiab-ue-12",
-                        "display-name": "UE 12",
-                        "sim-card": "aiab-sim-12"
-                    },
-                    {
-                        "device-id": "aiab-ue-13",
-                        "display-name": "UE 13",
-                        "sim-card": "aiab-sim-13"
-                    },
-                    {
-                        "device-id": "aiab-ue-14",
-                        "display-name": "UE 14",
-                        "sim-card": "aiab-sim-14"
-                    },
-                    {
-                        "device-id": "aiab-ue-15",
-                        "display-name": "UE 15",
-                        "sim-card": "aiab-sim-15"
+                        "sim-card": "aether-sim-5"
                     }
                 ],
                 "sim-card": [
                     {
-                        "sim-id": "aiab-sim-1",
-                        "display-name": "UE 1 Sim",
+                        "sim-id": "aether-sim-1",
+                        "display-name": "SIM 1",
                         "imsi": "208930100007487"
                     },
                     {
-                        "sim-id": "aiab-sim-2",
-                        "display-name": "UE 2 Sim",
+                        "sim-id": "aether-sim-2",
+                        "display-name": "SIM 2",
                         "imsi": "208930100007488"
                     },
                     {
-                        "sim-id": "aiab-sim-3",
-                        "display-name": "UE 3 Sim",
+                        "sim-id": "aether-sim-3",
+                        "display-name": "SIM 3",
                         "imsi": "208930100007489"
                     },
                     {
-                        "sim-id": "aiab-sim-4",
-                        "display-name": "UE 4 Sim",
+                        "sim-id": "aether-sim-4",
+                        "display-name": "SIM 4",
                         "imsi": "208930100007490"
                     },
                     {
-                        "sim-id": "aiab-sim-5",
-                        "display-name": "UE 5 Sim",
+                        "sim-id": "aether-sim-5",
+                        "display-name": "SIM 5",
                         "imsi": "208930100007491"
-                    },
-                    {
-                        "sim-id": "aiab-sim-6",
-                        "display-name": "UE 6 Sim",
-                        "imsi": "208930100007492"
-                    },
-                    {
-                        "sim-id": "aiab-sim-7",
-                        "display-name": "UE 7 Sim",
-                        "imsi": "208930100007493"
-                    },
-                    {
-                        "sim-id": "aiab-sim-8",
-                        "display-name": "UE 8 Sim",
-                        "imsi": "208930100007494"
-                    },                                {
-                        "sim-id": "aiab-sim-9",
-                        "display-name": "UE 9 Sim",
-                        "imsi": "208930100007495"
-                    },
-                    {
-                        "sim-id": "aiab-sim-10",
-                        "display-name": "UE 10 Sim",
-                        "imsi": "208930100007496"
-                    },
-                    {
-                        "sim-id": "aiab-sim-11",
-                        "display-name": "UE 11 Sim",
-                        "imsi": "208930100007497"
-                    },
-                    {
-                        "sim-id": "aiab-sim-12",
-                        "display-name": "UE 12 Sim",
-                        "imsi": "208930100007498"
-                    },
-                    {
-                        "sim-id": "aiab-sim-13",
-                        "display-name": "UE 13 Sim",
-                        "imsi": "208930100007499"
-                    },
-                    {
-                        "sim-id": "aiab-sim-14",
-                        "display-name": "UE 14 Sim",
-                        "imsi": "208930100007500"
-                    },
-                    {
-                        "sim-id": "aiab-sim-15",
-                        "display-name": "UE 15 Sim",
-                        "imsi": "208930100007501"
                     }
                 ],
                 "device-group": [
                     {
-                        "display-name": "AiaB Users",
-                        "device-group-id": "aiab-device-group",
+                        "display-name": "Aether Users",
+                        "device-group-id": "aether-device-group",
                         "device": [
                             {
-                                "device-id": "aiab-ue-1",
+                                "device-id": "aether-ue-1",
                                 "enable": true
                             },
                             {
-                                "device-id": "aiab-ue-2",
+                                "device-id": "aether-ue-2",
                                 "enable": true
                             },
                             {
-                                "device-id": "aiab-ue-3",
+                                "device-id": "aether-ue-3",
                                 "enable": true
                             },
                             {
-                                "device-id": "aiab-ue-4",
+                                "device-id": "aether-ue-4",
                                 "enable": true
                             },
                             {
-                                "device-id": "aiab-ue-5",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-6",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-7",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-8",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-9",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-10",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-11",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-12",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-13",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-14",
-                                "enable": true
-                            },
-                            {
-                                "device-id": "aiab-ue-15",
+                                "device-id": "aether-ue-5",
                                 "enable": true
                             }
                         ],
-                        "ip-domain": "aiab-ip-pool",
+                        "ip-domain": "aether-ip-pool",
                         "mbr": {
                             "uplink": 1000000,
                             "downlink": 1000000
                         },
-                        "traffic-class": "aiab-class-1"
+                        "traffic-class": "aether-class-1"
                     }
                 ],
                 "ip-domain": [
@@ -250,7 +111,7 @@
                         "display-name": "IP pool",
                         "dnn": "internet",
                         "dns-primary": "8.8.8.8",
-                        "ip-domain-id": "aiab-ip-pool",
+                        "ip-domain-id": "aether-ip-pool",
                         "mtu": 1460,
                         "subnet": "172.250.0.0/16"
                     }
@@ -259,7 +120,7 @@
                     {
                         "small-cell-id": "gnb1",
                         "display-name": "gNodeB 1",
-                        "address": "aiab-gnb1",
+                        "address": "aether-gnb1",
                         "enable": true,
                         "tac": "0001"
                     }
@@ -267,8 +128,8 @@
                 "upf": [
                     {
                         "address": "upf",
-                        "display-name": "AiaB UPF",
-                        "upf-id": "aiab-upf",
+                        "display-name": "Aether UPF",
+                        "upf-id": "aether-upf",
                         "port": 8805,
                         "config-endpoint": "http://upf-http.omec.svc:8080"
                     }
@@ -276,19 +137,19 @@
                 "slice": [
                     {
                         "default-behavior": "ALLOW-ALL",
-                        "display-name": "AiaB Slice",
+                        "display-name": "Aether Slice",
                         "device-group": [
                             {
-                                "device-group": "aiab-device-group",
+                                "device-group": "aether-device-group",
                                 "enable": true
                             }
                         ],
                         "filter": [],
-                        "slice-id": "aiab-vcs",
+                        "slice-id": "aether-vcs",
                         "connectivity-service": "5g",
                         "sd": "010203",
                         "sst": "1",
-                        "upf": "aiab-upf",
+                        "upf": "aether-upf",
                         "mbr": {
                             "uplink": 10000000,
                             "downlink": 5000000
@@ -302,7 +163,7 @@
             {
                 "description": "High Priority TC",
                 "display-name": "Class 1",
-                "traffic-class-id": "aiab-class-1",
+                "traffic-class-id": "aether-class-1",
                 "pdb": 100,
                 "arp": 1,
                 "pelr": 3,
