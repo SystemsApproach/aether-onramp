@@ -1,0 +1,178 @@
+{
+    "default-target": "aiab-enterprise",
+    "Updates": {
+        "site-2.1.0": [
+            {
+                "description": "Aether Test Site",
+                "display-name": "Aether Site",
+                "site-id": "aiab-site",
+                "imsi-definition": {
+                    "mcc": "208",
+                    "mnc": "93",
+                    "enterprise": 1,
+                    "format": "CCCNNEESSSSSSSS"
+                },
+                "connectivity-service": {
+                    "core-5g": {
+                        "endpoint": "http://webui.omec.svc:5000/config"
+                    }
+                },
+                "device": [
+                    {
+                        "device-id": "aiab-ue-1",
+                        "display-name": "UE 1",
+                        "sim-card": "aiab-sim-1"
+                    },
+                    {
+                        "device-id": "aiab-ue-2",
+                        "display-name": "UE 2",
+                        "sim-card": "aiab-sim-2"
+                    },
+                    {
+                        "device-id": "aiab-ue-3",
+                        "display-name": "UE 3",
+                        "sim-card": "aiab-sim-3"
+                    },
+                    {
+                        "device-id": "aiab-ue-4",
+                        "display-name": "UE 4",
+                        "sim-card": "aiab-sim-4"
+                    },
+                    {
+                        "device-id": "aiab-ue-5",
+                        "display-name": "UE 5",
+                        "sim-card": "aiab-sim-5"
+                    }
+                ],
+                "sim-card": [
+                    {
+                        "sim-id": "aiab-sim-1",
+                        "display-name": "SIM 1",
+                        "imsi": "208930100007487"
+                    },
+                    {
+                        "sim-id": "aiab-sim-2",
+                        "display-name": "SIM 2",
+                        "imsi": "208930100007488"
+                    },
+                    {
+                        "sim-id": "aiab-sim-3",
+                        "display-name": "SIM 3",
+                        "imsi": "208930100007489"
+                    },
+                    {
+                        "sim-id": "aiab-sim-4",
+                        "display-name": "SIM 4",
+                        "imsi": "208930100007490"
+                    },
+                    {
+                        "sim-id": "aiab-sim-5",
+                        "display-name": "SIM 5",
+                        "imsi": "208930100007491"
+                    }
+                ],
+                "device-group": [
+                    {
+                        "display-name": "Aether Users",
+                        "device-group-id": "aiab-device-group",
+                        "device": [
+                            {
+                                "device-id": "aiab-ue-1",
+                                "enable": true
+                            },
+                            {
+                                "device-id": "aiab-ue-2",
+                                "enable": true
+                            },
+                            {
+                                "device-id": "aiab-ue-3",
+                                "enable": true
+                            },
+                            {
+                                "device-id": "aiab-ue-4",
+                                "enable": true
+                            },
+                            {
+                                "device-id": "aiab-ue-5",
+                                "enable": true
+                            }
+                        ],
+                        "ip-domain": "aiab-ip-pool",
+                        "mbr": {
+                            "uplink": 1000000,
+                            "downlink": 1000000
+                        },
+                        "traffic-class": "aiab-class-1"
+                    }
+                ],
+                "ip-domain": [
+                    {
+                        "admin-status": "ENABLE",
+                        "display-name": "IP pool",
+                        "dnn": "internet",
+                        "dns-primary": "8.8.8.8",
+                        "ip-domain-id": "aiab-ip-pool",
+                        "mtu": 1460,
+                        "subnet": "172.250.0.0/16"
+                    }
+                ],
+                "small-cell": [
+                    {
+                        "small-cell-id": "gnb1",
+                        "display-name": "gNodeB 1",
+                        "address": "aiab-gnb1",
+                        "enable": true,
+                        "tac": "0001"
+                    }
+                ],
+                "upf": [
+                    {
+                        "address": "upf",
+                        "display-name": "Aether UPF",
+                        "upf-id": "aiab-upf",
+                        "port": 8805,
+                        "config-endpoint": "http://upf-http.omec.svc:8080"
+                    }
+                ],
+                "slice": [
+                    {
+                        "default-behavior": "ALLOW-ALL",
+                        "display-name": "Aether Slice",
+                        "device-group": [
+                            {
+                                "device-group": "aiab-device-group",
+                                "enable": true
+                            }
+                        ],
+                        "filter": [],
+                        "slice-id": "aiab-vcs",
+                        "connectivity-service": "5g",
+                        "sd": "010203",
+                        "sst": "1",
+                        "upf": "aiab-upf",
+                        "mbr": {
+                            "uplink": 10000000,
+                            "downlink": 5000000
+                        },
+                        "priority-traffic-rule": []
+                    }
+                ]
+            }
+        ],
+        "traffic-class-2.1.0": [
+            {
+                "description": "High Priority TC",
+                "display-name": "Class 1",
+                "traffic-class-id": "aiab-class-1",
+                "pdb": 100,
+                "arp": 1,
+                "pelr": 3,
+                "qci": 1
+            }
+        ]
+    },
+    "Deletes": {},
+    "Extensions": {
+        "transaction-strategy-111": 1
+    }
+}

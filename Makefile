@@ -143,7 +143,7 @@ node-prep: | $(M)/helm-ready /opt/cni/bin/static
 
 
 ifeq ($(K8S_INSTALL),rke2)
-clean: | roc-clean monitoring-clean core-clean router-clean
+clean: | roc-clean monitoring-clean core-clean net-clean
 	sudo /usr/local/bin/rke2-uninstall.sh || true
 	sudo rm -rf /usr/local/bin/kubectl
 	rm -rf $(M)
