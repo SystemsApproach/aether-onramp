@@ -64,7 +64,7 @@ omec-control-plane:
       # Use externalIP if you need to access AMF from remote setup 
       #    and you don't want setup NodePort Service Type
       ngapp:
-        externalIp: "10.76.28.113"
+        externalIp: ${NODE_IP}
         port: 38412
       cfgFiles:
         amfcfg.conf:

@@ -49,7 +49,7 @@ endif
 
 net-prep: node-prep
 ifeq ($(ENABLE_ROUTER),true)
-ifeq ($(ENABLE_GNBSIM),true)
+ifeq ($(ENABLE_RANSIM),true)
 net-prep: $(M)/router-pod
 else
 net-prep: $(M)/router-host

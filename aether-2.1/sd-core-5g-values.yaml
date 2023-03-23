@@ -273,7 +273,7 @@ omec-user-plane:
 # 5g-ran-sim Helm Charts values - https://gerrit.opencord.org/sdcore-helm-charts/5g-ran-sim/values.yaml
 
 5g-ran-sim:
-  enable: ${ENABLE_GNBSIM}
+  enable: ${ENABLE_RANSIM}
   resources:
     enabled: false
   images:

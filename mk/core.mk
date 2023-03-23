@@ -4,7 +4,7 @@
 
 CORE_PHONY := 4g-core 5g-core core-clean
 
-4g-core: node-prep
+4g-core: node-prep net-prep
 4g-core: $(M)/4g-core
 $(M)/4g-core:
 	@if [[ "${CHARTS}" == "local" || "${CHARTS}" == "local-sdcore" ]]; then \
@@ -18,13 +18,13 @@ $(M)/4g-core:
 		--values - \
 		sd-core \
 		$(SD_CORE_CHART)
-	@if [[ "${ENABLE_OAISIM}" == "false" ]]; then \
+	@if [[ "${ENABLE_RANSIM}" == "false" ]]; then \
 		$(eval mme_ip := $(shell ip -4 -o addr show $${DATA_IFACE} | awk '{print $$4}' | cut -d'/' -f1)) \
 		echo "Your MME IP is $(mme_ip)"; \
 	fi
 	@touch $@
 
-5g-core: net-prep
+5g-core: net-prep net-prep
 5g-core: $(M)/5g-core
 $(M)/5g-core:
 	@if [[ "${CHARTS}" == "local" || "${CHARTS}" == "local-sdcore" ]]; then \
@@ -32,7 +32,7 @@ $(M)/5g-core:
 	else \
 	        helm repo update; \
 	fi
-	NODE_IP=${NODE_IP} DATA_IFACE=${DATA_IFACE} RAN_SUBNET=${RAN_SUBNET} ENABLE_GNBSIM=${ENABLE_GNBSIM} envsubst < $(5G_CORE_VALUES) | \
+	NODE_IP=${NODE_IP} DATA_IFACE=${DATA_IFACE} RAN_SUBNET=${RAN_SUBNET} ENABLE_RANSIM=${ENABLE_RANSIM} envsubst < $(5G_CORE_VALUES) | \
 	helm upgrade --create-namespace --install --wait $(HELM_GLOBAL_ARGS) \
 		--namespace omec \
 		--values - \
