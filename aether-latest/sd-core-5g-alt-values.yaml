@@ -23,7 +23,7 @@ omec-control-plane:
   images:
     repository: "registry.opennetworking.org/docker.io/"
     #tags:
-    #  amf: # add new image name
+    #  amf: <amf image tag>
     # refer to above Helm Chart to add other NF images
 
   kafka:
@@ -94,7 +94,6 @@ omec-control-plane:
             mongoDBStreamEnable: false    # enable/disable MongoDB stream in NRF.
             nfProfileExpiryEnable: false  # if enabled, remove NF profile if no keepalive received
             nfKeepAliveTime: 60           # default timeout for NF profiles
-	                                  # (sent to NF during registration/update process)
 
 
 # Override values for omec-sub-provision (subscriber) Helm Chart
@@ -220,7 +219,6 @@ omec-user-plane:
           hwcksum: true
           log_level: "trace"
           gtppsc: true        # Extension header enabled in 5G.
-	                      # QFI in PDU session extension header
           cpiface:
             dnn: "internet"              # Must match Slice dnn
             hostname: "upf"
