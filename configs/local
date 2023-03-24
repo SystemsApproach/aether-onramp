@@ -17,11 +17,11 @@ RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd
 RANCHER_MONITORING_CHART     := rancher/rancher-monitoring
 
 # Helm Value Overrides and other Config Files
-ROC_VALUES     := $(MAKEDIR)/aether-local/roc-values.yaml 
-ROC_DEFAULTENT_MODEL := $(MAKEDIR)/aether-local/roc-defaultent-model.json 
+ROC_VALUES     := $(MAKEDIR)/aether-latest/roc-values.yaml 
+ROC_DEFAULTENT_MODEL := $(MAKEDIR)/aether-latest/roc-defaultent-model.json 
 ROC_4G_MODELS  := $(MAKEDIR)/aether-local/roc-4g-models.json 
 ROC_5G_MODELS  := $(MAKEDIR)/aether-local/roc-5g-models.json 
 4G_CORE_VALUES := $(MAKEDIR)/aether-local/sd-core-4g-values.yaml 
 5G_CORE_VALUES := $(MAKEDIR)/aether-local/sd-core-5g-values.yaml 
-TEST_APP_VALUES := $(MAKEDIR)/aether-local/5g-test-apps-values.yaml 
-MONITORING_VALUES := $(MAKEDIR)/aether-local/monitoring.yaml
+TEST_APP_VALUES := $(MAKEDIR)/aether-latest/5g-test-apps-values.yaml 
+MONITORING_VALUES := $(MAKEDIR)/aether-latest/monitoring.yaml
