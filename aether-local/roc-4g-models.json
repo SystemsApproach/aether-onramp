@@ -27,6 +27,11 @@
                         "device-id": "aiab-ue-2",
                         "display-name": "UE 2",
                         "sim-card": "aiab-sim-2"
+                    },
+                    {
+                        "device-id": "aiab-ue-3",
+                        "display-name": "UE 3",
+                        "sim-card": "aiab-sim-3"
                     }
                 ],
                 "sim-card": [
@@ -35,7 +40,7 @@
                         "display-name": "UE 1 Sim",
                         "imsi": "315010999912301"
                     },
-		                        {
+                    {
                         "sim-id": "aiab-sim-2",
                         "display-name": "UE 2 Sim",
                         "imsi": "315010999912302"
@@ -59,7 +64,7 @@
                                 "device-id": "aiab-ue-2",
                                 "enable": true
                             },
-			    {
+                            {
                                 "device-id": "aiab-ue-3",
                                 "enable": true
                             }
