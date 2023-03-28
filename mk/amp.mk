@@ -8,7 +8,7 @@ roc: $(M)/roc
 $(M)/roc: $(M)/helm-ready
 	kubectl get namespace aether-roc 2> /dev/null || kubectl create namespace aether-roc
 	helm repo update
-	if [ "$(CHARTS)" == "local" ]; then helm dep up $(AETHER_ROC_UMBRELLA_CHART); fi
+	if [ "$(CHARTS)" == "roc-local" ]; then helm dep up $(AETHER_ROC_UMBRELLA_CHART); fi
 	if [ "$(CHARTS)" == "release-2.0" -o "$(CHARTS)" == "release-1.6" ]; then \
 		helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
 			--namespace kube-system \
