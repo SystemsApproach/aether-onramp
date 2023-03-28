@@ -58,7 +58,7 @@ omec-sub-provision:
               opc: 69d5c2eb2e2e624750541d3bbc692ba5
               key: 000102030405060708090a0b0c0d0e0f
               sequenceNumber: 96
-            - ueId-start: 315010205000001
+            - ueId-start: 315010205000001	# example of multiple ranges
               ueId-end: 315010205000020
               plmnId: 315010
               opc: 69d5c2eb2e2e624750541d3bbc692ba5
