@@ -122,7 +122,7 @@ omec-sub-provision:
             # You can have any number of subscriber ranges
             subscribers:
             - ueId-start: "001010123456864"
-              ueId-end: "001010123456865"
+              ueId-end: "001010123456868"
               plmnId: "00101"
               opc: "00000000000000000000000000000000"
               op: ""
@@ -134,7 +134,7 @@ omec-sub-provision:
             - name:  "5g-user-group1"
               imsis:
                 - "001010123456864"
-                - "001010123456865"
+                - "001010123456868"
               ip-domain-name: "pool1"
               ip-domain-expanded:
                 dnn: internet
