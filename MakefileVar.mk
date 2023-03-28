@@ -25,6 +25,8 @@ ENABLE_RANSIM ?= true
 ENABLE_SUBSCRIBER_PROXY ?= false
 GNBSIM_COLORS ?= true
 
+DATA_IFACE ?= data
+
 K8S_INSTALL ?= rke2
 CTR_CMD     := sudo /var/lib/rancher/rke2/bin/ctr --address /run/k3s/containerd/containerd.sock --namespace k8s.io
 

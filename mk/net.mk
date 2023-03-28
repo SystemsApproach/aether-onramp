@@ -12,7 +12,6 @@
 NET_PHONY :=  net-prep router-pod router-host net-clean
 
 
-DATA_IFACE ?= data
 ifeq ($(DATA_IFACE), data)
 	RAN_SUBNET := 192.168.251.0/24
 else

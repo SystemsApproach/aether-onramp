@@ -7,7 +7,7 @@ CORE_PHONY := 4g-core 5g-core core-clean
 4g-core: node-prep net-prep
 4g-core: $(M)/4g-core
 $(M)/4g-core:
-	@if [[ "${CHARTS}" == "local" || "${CHARTS}" == "local-sdcore" ]]; then \
+	@if [[ "${CHARTS}" == "local-sdcore" ]]; then \
 		helm dep up $(SD_CORE_CHART); \
 	else \
 		helm repo update; \
@@ -27,7 +27,7 @@ $(M)/4g-core:
 5g-core: net-prep net-prep
 5g-core: $(M)/5g-core
 $(M)/5g-core:
-	@if [[ "${CHARTS}" == "local" || "${CHARTS}" == "local-sdcore" ]]; then \
+	@if [[ "${CHARTS}" == "local-sdcore" ]]; then \
 	        helm dep up $(SD_CORE_CHART); \
 	else \
 	        helm repo update; \
