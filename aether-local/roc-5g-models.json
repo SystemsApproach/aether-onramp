@@ -7,8 +7,8 @@
                 "display-name": "Aether Site",
                 "site-id": "aiab-site",
                 "imsi-definition": {
-                    "mcc": "208",
-                    "mnc": "93",
+                    "mcc": "001",
+                    "mnc": "01",
                     "enterprise": 1,
                     "format": "CCCNNEESSSSSSSS"
                 },
@@ -48,27 +48,27 @@
                     {
                         "sim-id": "aiab-sim-1",
                         "display-name": "SIM 1",
-                        "imsi": "208930100007487"
+                        "imsi": "001010123456864"
                     },
                     {
                         "sim-id": "aiab-sim-2",
                         "display-name": "SIM 2",
-                        "imsi": "208930100007488"
+                        "imsi": "001010123456865"
                     },
                     {
                         "sim-id": "aiab-sim-3",
                         "display-name": "SIM 3",
-                        "imsi": "208930100007489"
+                        "imsi": "001010123456866"
                     },
                     {
                         "sim-id": "aiab-sim-4",
                         "display-name": "SIM 4",
-                        "imsi": "208930100007490"
+                        "imsi": "001010123456867"
                     },
                     {
                         "sim-id": "aiab-sim-5",
                         "display-name": "SIM 5",
-                        "imsi": "208930100007491"
+                        "imsi": "001010123456868"
                     }
                 ],
                 "device-group": [
