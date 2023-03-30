@@ -8,8 +8,8 @@ roc: $(M)/roc
 $(M)/roc: $(M)/helm-ready
 	kubectl get namespace aether-roc 2> /dev/null || kubectl create namespace aether-roc
 	helm repo update
-	if [ "$(CHARTS)" == "roc-local" ]; then helm dep up $(AETHER_ROC_UMBRELLA_CHART); fi
-	if [ "$(CHARTS)" == "release-2.0" -o "$(CHARTS)" == "release-1.6" ]; then \
+	if [ "$(LOCAL_CHARTS)" == "true" ]; then helm dep up $(AETHER_ROC_UMBRELLA_CHART); fi
+	if [ "$(BLUEPRINT)" == "release-2.0" ]; then \
 		helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
 			--namespace kube-system \
 			--values $(ROC_VALUES) \
@@ -52,7 +52,7 @@ $(M)/roc: $(M)/helm-ready
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
 	echo "API SERVICE : ${API_SERVICE}"
-	if [ "$(CHARTS)" != "release-2.0" -a "$(CHARTS)" != "release-1.6" ]; then \
+	if [ "$(BLURPRINT)" != "release-2.0" ]; then \
         until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
             curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
             --header 'Content-Type: application/json' \
@@ -76,7 +76,7 @@ $(M)/roc: $(M)/helm-ready
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
 	echo "API SERVICE : ${API_SERVICE}"
-	if [ "$(CHARTS)" != "release-2.0" -a "$(CHARTS)" != "release-1.6" ]; then \
+	if [ "$(BLUEPRINT)" != "release-2.0" ]; then \
         until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
             curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
             --header 'Content-Type: application/json' \

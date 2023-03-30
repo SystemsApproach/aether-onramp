@@ -7,7 +7,7 @@ CORE_PHONY := 4g-core 5g-core core-clean
 4g-core: node-prep net-prep
 4g-core: $(M)/4g-core
 $(M)/4g-core:
-	@if [[ "${CHARTS}" == "local-sdcore" ]]; then \
+	@if [[ "${LOCAL_CHARTS}" == "true" ]]; then \
 		helm dep up $(SD_CORE_CHART); \
 	else \
 		helm repo update; \
@@ -27,7 +27,7 @@ $(M)/4g-core:
 5g-core: net-prep net-prep
 5g-core: $(M)/5g-core
 $(M)/5g-core:
-	@if [[ "${CHARTS}" == "local-sdcore" ]]; then \
+	@if [[ "${LOCAL_CHARTS}" == "true" ]]; then \
 	        helm dep up $(SD_CORE_CHART); \
 	else \
 	        helm repo update; \
@@ -52,7 +52,6 @@ core-clean:
 #
 
 5g-test: | 5g-core
-	@if [[ "${CHARTS}" == "release-1.6" ]]; then echo "[NOTE] 5G Test not supported for Aether 1.6, exiting..."; exit 1; fi
 	@echo "Test: Registration + UE initiated PDU Session Establishment + User Data packets"
 	@sleep 60
 	@rm -f /tmp/gnbsim.out
@@ -68,7 +67,7 @@ reset-dbtestapp:
 
 dbtestapp:
 	helm repo update
-	if [ "$(CHARTS)" == "local" ]; then helm dep up $(5G_TEST_APPS_CHART); fi
+	if [ "$(LOCAL_CHARTS)" == "true" ]; then helm dep up $(5G_TEST_APPS_CHART); fi
 	helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
 		--namespace omec \
 		5g-test-app \

@@ -2,12 +2,15 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
+BLUEPRINT  ?=  radio
+
 SHELL		:= /bin/bash
 MAKEDIR		:= $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 BUILD		?= $(MAKEDIR)/build
 M           	?= $(BUILD)/milestones
 SCRIPTDIR	:= $(MAKEDIR)/scripts
 RESOURCEDIR	:= $(MAKEDIR)/resources
+BLUEPRINTDIR	:= $(MAKEDIR)/blueprints/$(BLUEPRINT)
 WORKSPACE	?= $(HOME)
 VENV		?= $(BUILD)/venv/aiab
 
@@ -21,11 +24,8 @@ RKE2_K8S_VERSION  ?= v1.23.4+rke2r1
 K8S_VERSION       ?= v1.20.11
 
 ENABLE_ROUTER ?= true
-ENABLE_RANSIM ?= true
 ENABLE_SUBSCRIBER_PROXY ?= false
 GNBSIM_COLORS ?= true
-
-DATA_IFACE ?= data
 
 K8S_INSTALL ?= rke2
 CTR_CMD     := sudo /var/lib/rancher/rke2/bin/ctr --address /run/k3s/containerd/containerd.sock --namespace k8s.io
@@ -37,10 +37,5 @@ NO_PROXY        ?= ${no_proxy}
 
 HELM_GLOBAL_ARGS ?=
 
-# Allow installing local charts or specific versions of published charts.
-# E.g., to install the Aether 2.0 release:
-#    CHARTS=release-2.0 make foo
-# Default is to install from the latest charts.
-CHARTS     ?= latest
-CONFIGFILE := configs/$(CHARTS)
-include $(CONFIGFILE)
+# Include blueprint-specific configuration parameters
+include $(BLUEPRINTDIR)/config
