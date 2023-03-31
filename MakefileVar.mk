@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-BLUEPRINT  ?=  radio
+BLUEPRINT  ?=  latest
 
 SHELL		:= /bin/bash
 MAKEDIR		:= $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
