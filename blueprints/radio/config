@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# Configuration or External (4G or 5G) Radio Blueprint
+# Configuration for External (4G or 5G) Radio Blueprint
 
 # Variables
 ENABLE_RANSIM := false
