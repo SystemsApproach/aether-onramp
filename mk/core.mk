@@ -24,7 +24,7 @@ $(M)/4g-core:
 	fi
 	@touch $@
 
-5g-core: net-prep net-prep
+5g-core: node-prep net-prep
 5g-core: $(M)/5g-core
 $(M)/5g-core:
 	@if [[ "${LOCAL_CHARTS}" == "true" ]]; then \
