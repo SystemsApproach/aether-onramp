@@ -11,13 +11,20 @@
 
 NET_PHONY :=  net-prep router-pod router-host net-clean
 
+NODE_IP ?= $(shell ip route get 8.8.8.8 | grep -oP 'src \K\S+')
+ifndef NODE_IP
+$(error NODE_IP is not set)
+endif
 
 ifeq ($(DATA_IFACE), data)
 	RAN_SUBNET := 192.168.251.0/24
 else
-	RAN_SUBNET := $(shell ip route | grep $${DATA_IFACE} | awk '/kernel/ {print $$1}' | head -1)
+	RAN_SUBNET := $(shell ip route | grep ${DATA_IFACE} | awk '/kernel/ {print $$1}' | head -1)
 	DATA_IFACE_PATH := $(shell find /*/systemd/network -maxdepth 1 -not -type d -name '*$(DATA_IFACE).network' -print)
 	DATA_IFACE_CONF ?= $(shell basename $(DATA_IFACE_PATH)).d
+endif
+ifndef RAN_SUBNET
+$(error RAN_SUBNET is not set)
 endif
 
 # systemd-networkd and systemd configs
@@ -27,10 +34,7 @@ ROUTER_POD_NETCONF    := /etc/systemd/network/10-aiab-dummy.netdev /etc/systemd/
 ROUTER_HOST_NETCONF   := /etc/systemd/network/10-aiab-access.netdev /etc/systemd/network/20-aiab-access.network /etc/systemd/network/10-aiab-core.netdev /etc/systemd/network/20-aiab-core.network /etc/systemd/network/$(DATA_IFACE_CONF)/macvlan.conf
 UE_NAT_CONF           := /etc/systemd/system/aiab-ue-nat.service
 
-NODE_IP ?= $(shell ip route get 8.8.8.8 | grep -oP 'src \K\S+')
-ifndef NODE_IP
-$(error NODE_IP is not set)
-endif
+
 
 
 $(M)/interface-check: | $(M)
