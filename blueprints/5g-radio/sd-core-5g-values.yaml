@@ -46,7 +46,7 @@ omec-control-plane:
 
     managedByConfigPod:
       enabled: true
-      # syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
+      syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
 
     sctplb:
       deploy: false # if enabled then deploy sctp pod. 

@@ -17,7 +17,7 @@ omec-control-plane:
   config:
     managedByConfigPod:
       enabled: true
-      # syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
+      syncUrl: http://sdcore-adapter-v2-1.aether-roc.svc:8080/synchronize
     config4g:
       deploy: true
     hss:
