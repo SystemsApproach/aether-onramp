@@ -43,11 +43,6 @@ $(M)/roc: $(M)/helm-ready
 4g-roc: $(M)/roc
 	sed -i 's/provision-network-slice: true/provision-network-slice: false/' $(4G_CORE_VALUES)
 	sed -i 's/# syncUrl/syncUrl/' $(4G_CORE_VALUES)
-	if [ "${ENABLE_SUBSCRIBER_PROXY}" == "true" ] ; then \
-		sed -i 's/# sub-proxy-endpt:/sub-proxy-endpt:/' $(4G_CORE_VALUES) ; \
-		sed -i 's/#   addr: sub/  addr: sub/' $(4G_CORE_VALUES) ; \
-		sed -i 's/#   port: 5000/  port: 5000/' $(4G_CORE_VALUES) ; \
-	fi
 	@$(eval ONOS_CLI_POD := $(shell kubectl -n aether-roc get pods -l name=onos-cli -o name))
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
@@ -67,11 +62,6 @@ $(M)/roc: $(M)/helm-ready
 5g-roc: $(M)/roc
 	sed -i 's/provision-network-slice: true/provision-network-slice: false/' $(5G_CORE_VALUES)
 	sed -i 's/# syncUrl/syncUrl/' $(5G_CORE_VALUES)
-	if [ "${ENABLE_SUBSCRIBER_PROXY}" == "true" ] ; then \
-		sed -i 's/# sub-proxy-endpt:/sub-proxy-endpt:/' $(5G_CORE_VALUES) ; \
-		sed -i 's/#   addr: sub/  addr: sub/' $(5G_CORE_VALUES) ; \
-		sed -i 's/#   port: 5000/  port: 5000/' $(5G_CORE_VALUES) ; \
-	fi
 	@$(eval ONOS_CLI_POD := $(shell kubectl -n aether-roc get pods -l name=onos-cli -o name))
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
@@ -91,14 +81,8 @@ roc-clean:
 	@echo "This could take 2-3 minutes..."
 	sed -i 's/provision-network-slice: false/provision-network-slice: true/' $(4G_CORE_VALUES)
 	sed -i 's/  syncUrl/  # syncUrl/' $(4G_CORE_VALUES)
-	sed -i 's/  sub-proxy-endpt:/  # sub-proxy-endpt:/' $(4G_CORE_VALUES)
-	sed -i 's/    addr: sub/  #   addr: sub/' $(4G_CORE_VALUES)
-	sed -i 's/    port: 5000/  #   port: 5000/' $(4G_CORE_VALUES)
 	sed -i 's/provision-network-slice: false/provision-network-slice: true/' $(5G_CORE_VALUES)
 	sed -i 's/  syncUrl/  # syncUrl/' $(5G_CORE_VALUES)
-	sed -i 's/  sub-proxy-endpt:/  # sub-proxy-endpt:/' $(5G_CORE_VALUES)
-	sed -i 's/    addr: sub/  #   addr: sub/' $(5G_CORE_VALUES)
-	sed -i 's/    port: 5000/  #   port: 5000/' $(5G_CORE_VALUES)
 	kubectl delete namespace aether-roc || true
 	rm -f $(M)/roc
 
