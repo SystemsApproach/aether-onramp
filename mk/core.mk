@@ -62,16 +62,3 @@ core-clean:
 	fi
 	@grep -q "Simulation Result: PASS\|Profile Status: PASS" /tmp/gnbsim.out
 
-reset-dbtestapp:
-	helm uninstall --namespace omec 5g-test-app
-
-dbtestapp:
-	helm repo update
-	if [ "$(LOCAL_CHARTS)" == "true" ]; then helm dep up $(5G_TEST_APPS_CHART); fi
-	helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
-		--namespace omec \
-		5g-test-app \
-		--values $(TEST_APP_VALUES) \
-		$(5G_TEST_APPS_CHART)
-	@echo "Finished to dbtestapp"
-

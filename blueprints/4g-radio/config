@@ -25,7 +25,6 @@ RANCHER_MONITORING_CHART     := rancher/rancher-monitoring
 
 # Helm Value Overrides and other Config Files
 ROC_VALUES     := $(BLUEPRINTDIR)/roc-values.yaml 
-ROC_DEFAULTENT_MODEL := $(BLUEPRINTDIR)/roc-defaultent-model.json 
 ROC_4G_MODELS  := $(BLUEPRINTDIR)/roc-4g-models.json 
 4G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-4g-values.yaml 
 MONITORING_VALUES := $(BLUEPRINTDIR)/monitoring.yaml

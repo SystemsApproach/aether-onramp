@@ -39,35 +39,23 @@ $(M)/roc: $(M)/helm-ready
 		$(AETHER_ROC_UMBRELLA_CHART)
 	touch $@
 
-# Load the ROC 4G models.  Disable loading network slice from SimApp.
+# Load the ROC 4G models.
 4g-roc: $(M)/roc
 	@$(eval ONOS_CLI_POD := $(shell kubectl -n aether-roc get pods -l name=onos-cli -o name))
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
 	echo "API SERVICE : ${API_SERVICE}"
-	if [ "$(BLURPRINT)" != "release-2.0" ]; then \
-        until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
-            curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
-            --header 'Content-Type: application/json' \
-            --data-raw "$$(cat ${ROC_DEFAULTENT_MODEL})"; do sleep 5; done; \
-	fi
 	until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
 		curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
 		--header 'Content-Type: application/json' \
 		--data-raw "$$(cat ${ROC_4G_MODELS})"; do sleep 5; done
 
-# Load the ROC 5G models.  Disable loading network slice from SimApp.
+# Load the ROC 5G models.
 5g-roc: $(M)/roc
 	@$(eval ONOS_CLI_POD := $(shell kubectl -n aether-roc get pods -l name=onos-cli -o name))
 	echo "ONOS CLI pod: ${ONOS_CLI_POD}"
 	@$(eval API_SERVICE := $(shell kubectl -n aether-roc get --no-headers=true services -l app.kubernetes.io/name=aether-roc-api | awk '{print $$1}'))
 	echo "API SERVICE : ${API_SERVICE}"
-	if [ "$(BLUEPRINT)" != "release-2.0" ]; then \
-        until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
-            curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
-            --header 'Content-Type: application/json' \
-            --data-raw "$$(cat ${ROC_DEFAULTENT_MODEL})"; do sleep 5; done; \
-	fi
 	until kubectl -n aether-roc exec ${ONOS_CLI_POD} -- \
 		curl -s -f -L -X PATCH "http://${API_SERVICE}:8181/aether-roc-api" \
 		--header 'Content-Type: application/json' \
