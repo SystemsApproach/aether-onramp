@@ -154,28 +154,8 @@ omec-sub-provision:
               site-info: "aiab"
             # UPF allocates IP address if there is only 1 device-group
             # SMF allocates IP address if there is >1 device-group
-            - name:  "5g-user-group2" # second device Group
-              imsis:
-                - "001010123456866"
-                - "001010123456867"
-                - "001010123456868"
-              ip-domain-name: "pool2"
-              ip-domain-expanded:
-                dnn: internet
-                dns-primary: "8.8.8.8"        # Value is sent to UE
-                mtu: 1460                     # Value is sent to UE when PDU Session Established
-                ue-ip-pool: "172.250.1.0/16"  # IP address pool for subscribers
-                ue-dnn-qos:
-                  dnn-mbr-downlink: 400000000 # UE level downlink QoS
-                  dnn-mbr-uplink:    10000000 # UE level uplink QoS
-                  bitrate-unit: bps           # Unit for above QoS rates
-                  traffic-class:              # Default bearer QCI/ARP (not used in 5G)
-                    name: "platinum"
-                    qci: 8
-                    arp: 6
-                    pdb: 300
-                    pelr: 6
-              site-info: "aiab2"
+            # ...define additional device groups here...
+            #
             network-slices:
             - name: "default"      # can be any unique slice name
               slice-id:            # must match with slice configured in gNB, UE
@@ -183,7 +163,6 @@ omec-sub-provision:
                 sst: 1
               site-device-group:
               - "5g-user-group1"   # All UEs in this device-group are assigned to this slice
-              - "5g-user-group2"
               # Applicaiton filters control what each user can access.
               # Default, allow access to all applications
               application-filtering-rules:

@@ -80,12 +80,12 @@ prometheus-ace:
       enabled: false
 
 sdcore-adapter-v2-1:
-  defaultTarget: aiab-enterprise
+  defaultTarget: the-enterprise
 
 enterprises:
-  - id: aiab-enterprise
-    name: AiaB Enterprise
-    lat: 52.5150
-    long: 13.3885
+  - id: the-enterprise
+    name: The Enterprise
+    lat: 32.3438
+    long: -111.0120
   - id: defaultent
     name: Default Enterprise
