@@ -111,7 +111,10 @@ omec-sub-provision:
       cfgFiles:
         simapp.yaml:
           configuration:
-            provision-network-slice: true # if enabled, Network Slices configured from simapp
+            provision-network-slice: true  # if enabled,  Device Groups & Network Slices
+	                                   #              are configured from simapp
+                                           # if disabled, Device Groups & Network Slices
+	                                   #              are configured from ROC
             sub-provision-endpt:
               addr: webui.omec.svc.cluster.local  # subscriber configuation endpoint.
             # sub-proxy-endpt:  # used if subscriber proxy is enabled in the ROC.
@@ -120,6 +123,7 @@ omec-sub-provision:
 
             # Configure Subscriber IMSIs and their security details.
             # You can have any number of subscriber ranges
+            # This block is always necessary to establish range(s) of valid IMSIs
             subscribers:
             - ueId-start: "001010123456864"
               ueId-end: "001010123456868"
@@ -129,7 +133,7 @@ omec-sub-provision:
               key: "ffffffffffffffffffffffffffffffff"
               sequenceNumber: "16f3b3f70fc2"
 
-            # Configure Device-Groups
+            # Configure Device Groups (ignored if provision-network-slice is disabled)
             device-groups:
             - name:  "5g-user-group1"
               imsis:
@@ -154,8 +158,8 @@ omec-sub-provision:
               site-info: "aiab"
             # UPF allocates IP address if there is only 1 device-group
             # SMF allocates IP address if there is >1 device-group
-            # ...define additional device groups here...
-            #
+
+            # Configure Network Slices (ignored if provision-network-slice is disabled)
             network-slices:
             - name: "default"      # can be any unique slice name
               slice-id:            # must match with slice configured in gNB, UE
