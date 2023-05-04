@@ -111,10 +111,10 @@ omec-sub-provision:
       cfgFiles:
         simapp.yaml:
           configuration:
-            provision-network-slice: true  # if enabled,  Device Groups & Network Slices
-	                                   #              are configured from simapp
-                                           # if disabled, Device Groups & Network Slices
-	                                   #              are configured from ROC
+            provision-network-slice: ${SA_CORE} # if enabled,  Device Groups & Network Slices
+	                                        #              are configured from simapp
+                                                # if disabled, Device Groups & Network Slices
+	                                        #              are configured from ROC
             sub-provision-endpt:
               addr: webui.omec.svc.cluster.local  # subscriber configuation endpoint.
             # sub-proxy-endpt:  # used if subscriber proxy is enabled in the ROC.

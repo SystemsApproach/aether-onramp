@@ -12,7 +12,7 @@ $(M)/4g-core:
 	else \
 		helm repo update; \
 	fi
-	NODE_IP=${NODE_IP} DATA_IFACE=${DATA_IFACE} RAN_SUBNET=${RAN_SUBNET} envsubst < $(4G_CORE_VALUES) | \
+	SA_CORE=${SA_CORE} NODE_IP=${NODE_IP} DATA_IFACE=${DATA_IFACE} RAN_SUBNET=${RAN_SUBNET} envsubst < $(4G_CORE_VALUES) | \
 	helm upgrade --create-namespace --install --wait $(HELM_GLOBAL_ARGS) \
 		--namespace omec \
 		--values - \
@@ -32,7 +32,7 @@ $(M)/5g-core:
 	else \
 	        helm repo update; \
 	fi
-	NODE_IP=${NODE_IP} DATA_IFACE=${DATA_IFACE} RAN_SUBNET=${RAN_SUBNET} ENABLE_RANSIM=${ENABLE_RANSIM} envsubst < $(5G_CORE_VALUES) | \
+	SA_CORE=${SA_CORE} NODE_IP=${NODE_IP} DATA_IFACE=${DATA_IFACE} RAN_SUBNET=${RAN_SUBNET} ENABLE_RANSIM=${ENABLE_RANSIM} envsubst < $(5G_CORE_VALUES) | \
 	helm upgrade --create-namespace --install --wait $(HELM_GLOBAL_ARGS) \
 		--namespace omec \
 		--values - \

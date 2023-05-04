@@ -8,6 +8,7 @@
 ENABLE_RANSIM := true
 LOCAL_CHARTS := false
 DATA_IFACE := data
+SA_CORE := true
 
 # For installing the Core
 SD_CORE_CHART            := aether/sd-core
