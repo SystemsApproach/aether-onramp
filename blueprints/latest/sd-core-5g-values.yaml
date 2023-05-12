@@ -293,7 +293,7 @@ omec-user-plane:
       yamlCfgFiles:
         gnb.conf:
           logger:
-            logLevel: trace # how detailed the log will be, values: trace, debug, info, warn, error, fatal, panic
+            logLevel: trace # trace, debug, info, warn, error, fatal, panic
           configuration:
              #gnbs: # pool of gNodeBs
              #  gnb1:
@@ -303,24 +303,144 @@ omec-user-plane:
                  defaultAmf:
                    hostName: amf # Host name of AMF
                    port: 38412 # AMF port
+
+              # See https://github.com/omec-project/gnbsim for
+              # Documentation on supported profiles and their parameters
+              # Profile 2 (pdusessest) is typically enabled by default
+              profiles:
+              - profileType: register           # UE Registration
+                profileName: profile1
+                enable: false
+                gnbName: gnb1
+                execInParallel: false
+                startImsi: 208930100007487
+                ueCount: 5                
+                defaultAs: "192.168.250.1"
+                perUserTimeout: 100       
+                plmnId:                   
+                  mcc: 208                
+                  mnc: 93                 
+                opc: "981d464c7c52eb6e5036234984ad0bcf"
+                key: "5122250214c33e723a5dd523fc145fc0"
+                sequenceNumber: "16f3b3f70fc2"
+
+              - profileType: pdusessest         # UE Initiated Session
+                profileName: profile2
+                enable: true
+                gnbName: gnb1
+                execInParallel: false
+                startImsi: 208930100007487
+                ueCount: 5
+                defaultAs: "192.168.250.1"
+                perUserTimeout: 100
+                plmnId:
+                  mcc: 208
+                  mnc: 93
+                dataPktCount: 5
+                opc: "981d464c7c52eb6e5036234984ad0bcf"
+                key: "5122250214c33e723a5dd523fc145fc0"
+                sequenceNumber: "16f3b3f70fc2"
+
+              - profileType: anrelease          # AN Release
+                profileName: profile3
+                enable: false
+                execInParallel: false
+                gnbName: gnb1
+                startImsi: 208930100007497
+                ueCount: 5
+                defaultAs: "192.168.250.1"
+                perUserTimeout: 100 
+                plmnId:
+                  mcc: 208
+                  mnc: 93
+                opc: "981d464c7c52eb6e5036234984ad0bcf"
+                key: "5122250214c33e723a5dd523fc145fc0"
+                sequenceNumber: "16f3b3f70fc2"
+
+              - profileType: uetriggservicereq  # UE Initiated Service Release
+                profileName: profile4
+                enable: false
+                gnbName: gnb1
+                execInParallel: false
+                startImsi: 208930100007497
+                ueCount: 5
+                plmnId:
+                  mcc: 208
+                  mnc: 93
+                defaultAs: "192.168.250.1"
+                perUserTimeout: 100
+                opc: "981d464c7c52eb6e5036234984ad0bcf"
+                key: "5122250214c33e723a5dd523fc145fc0"
+                sequenceNumber: "16f3b3f70fc2"
+
+              - profileType: deregister         # UE Initiated De-registration
+                profileName: profile5
+                enable: false
+                gnbName: gnb1
+                execInParallel: false
+                startImsi: 208930100007497
+                ueCount: 5
+                defaultAs: "192.168.250.1"
+                perUserTimeout: 100
+                plmnId:
+                  mcc: 208
+                  mnc: 93
+                opc: "981d464c7c52eb6e5036234984ad0bcf"
+                key: "5122250214c33e723a5dd523fc145fc0"
+                sequenceNumber: "16f3b3f70fc2"
+
+              - profileType: nwtriggeruedereg   # N/W Initiated De-registration
+                profileName: profile6
+                enable: false
+                gnbName: gnb1
+                execInParallel: false
+                startImsi: 208930100007497
+                ueCount: 5 
+                defaultAs: "192.168.250.1"
+                perUserTimeout: 100 
+                plmnId: 
+                  mcc: 208 
+                  mnc: 93 
+                opc: "981d464c7c52eb6e5036234984ad0bcf"
+                key: "5122250214c33e723a5dd523fc145fc0"
+                sequenceNumber: "16f3b3f70fc2"
+
+              - profileType: uereqpdusessrelease  # UE Initiated Session Release
+                profileName: profile7 
+                enable: false 
+                gnbName: gnb1 
+                execInParallel: false
+                startImsi: 208930100007497
+                ueCount: 5 
+                plmnId:
+                  mcc: 208 
+                  mnc: 93
+                defaultAs: "192.168.250.1"
+                perUserTimeout: 100
+                opc: "981d464c7c52eb6e5036234984ad0bcf"
+                key: "5122250214c33e723a5dd523fc145fc0"
+                sequenceNumber: "16f3b3f70fc2"
+
+              # Custom Profiles that iterate through
+              # combinations of the supported Profiles
               customProfiles:
                 customProfiles1:
-                  profileType: custom # profile type
-                  profileName: custom1 # uniquely identifies a profile within application
-                  enable: false # Set true to execute the profile, false otherwise.
-                  execInParallel: false #run all subscribers in parallel.
-                  stepTrigger: false #wait for trigger to move to next step
-                  gnbName: gnb1 # gNB to be used for this profile
+                  profileType: custom
+                  profileName: custom1
+                  enable: false
+                  execInParallel: false
+                  stepTrigger: false # wait for trigger to move to next step
+                  gnbName: gnb1
                   startImsi: 208930100007487
                   ueCount: 30
-                  defaultAs: "192.168.250.1" #default icmp pkt destination
+                  defaultAs: "192.168.250.1"
                   opc: "981d464c7c52eb6e5036234984ad0bcf"
                   key: "5122250214c33e723a5dd523fc145fc0"
                   sequenceNumber: "16f3b3f70fc2"
-                  plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
-                    mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
-                    mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
-                  # start from "startiteration" and then move through all the iteration till quit
+                  plmnId:
+                    mcc: 208
+                    mnc: 93
+                  # Starting iteration; step through until quit
                   startiteration: iteration1
                   iterations:
                     - "name": "iteration1"
@@ -331,116 +451,10 @@ omec-user-plane:
                     - "name": "iteration2"
                       "1": "AN-RELEASE-PROCEDURE 10"
                       "2": "UE-TRIGGERED-SERVICE-REQUEST-PROCEDURE 5"
-                      "repeat": 0 #default value 0 . i.e execute once
-                      "next":  "iteration3" #default value quit. i.e. no further iteration to run
+                      "repeat": 0   # default = 0 (execute once)
+                      "next":  "iteration3"
                     - "name": "iteration3"
                       "1": "UE-INITIATED-DEREGISTRATION-PROCEDURE 10"
-                      "repeat": 0 #default value 0 . i.e execute once
-                      "next":  "quit" #default value quit. i.e. no further iteration to run
-              profiles: # profile information
-              - profileType: register # profile type
-                profileName: profile1 # uniqely identifies a profile within application
-                enable: false # Set true to execute the profile, false otherwise.
-                gnbName: gnb1 # gNB to be used for this profile
-                execInParallel: false #run all subscribers in this profile parallel
-                startImsi: 208930100007487 #First IMSI. Subsequent values will be used if ueCount is mo    re than 1
-                ueCount: 5 # Number of UEs for which the profile will be executed
-                defaultAs: "192.168.250.1" #default icmp pkt destination
-                perUserTimeout: 100 #if no expected event received in this time then treat it as failure
-                plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
-                  mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
-                  mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
-                opc: "981d464c7c52eb6e5036234984ad0bcf"
-                key: "5122250214c33e723a5dd523fc145fc0"
-                sequenceNumber: "16f3b3f70fc2"
-              - profileType: pdusessest
-                profileName: profile2
-                enable: true
-                gnbName: gnb1
-                execInParallel: false #run all subscribers in this profile parallel
-                startImsi: 208930100007487
-                ueCount: 5
-                defaultAs: "192.168.250.1" #default icmp pkt destination
-                perUserTimeout: 100 #if no expected event received in this time then treat it as failure
-                plmnId:
-                  mcc: 208
-                  mnc: 93
-                dataPktCount: 5 # Number of UL user data packets to be transmitted. Common for all UEs
-                opc: "981d464c7c52eb6e5036234984ad0bcf"
-                key: "5122250214c33e723a5dd523fc145fc0"
-                sequenceNumber: "16f3b3f70fc2"
-              - profileType: anrelease
-                profileName: profile3
-                enable: false
-                execInParallel: false #run all subscribers in this profile parallel
-                gnbName: gnb1
-                startImsi: 208930100007497
-                ueCount: 5
-                defaultAs: "192.168.250.1" #default icmp pkt destination
-                perUserTimeout: 100 #if no expected event received in this time then treat it as failure
-                plmnId:
-                  mcc: 208
-                  mnc: 93
-                opc: "981d464c7c52eb6e5036234984ad0bcf"
-                key: "5122250214c33e723a5dd523fc145fc0"
-                sequenceNumber: "16f3b3f70fc2"
-              - profileType: uetriggservicereq
-                profileName: profile4
-                enable: false
-                gnbName: gnb1
-                execInParallel: false #run all subscribers in this profile parallel
-                startImsi: 208930100007497
-                ueCount: 5
-                plmnId:
-                  mcc: 208
-                  mnc: 93
-                defaultAs: "192.168.250.1" #default icmp pkt destination
-                perUserTimeout: 100 #if no expected event received in this time then treat it as failure
-                opc: "981d464c7c52eb6e5036234984ad0bcf"
-                key: "5122250214c33e723a5dd523fc145fc0"
-                sequenceNumber: "16f3b3f70fc2"
-              - profileType: deregister
-                profileName: profile5
-                enable: false
-                gnbName: gnb1
-                execInParallel: false #run all subscribers in this profile parallel
-                startImsi: 208930100007497
-                ueCount: 5
-                defaultAs: "192.168.250.1" #default icmp pkt destination
-                perUserTimeout: 100 #if no expected event received in this time then treat it as failure
-                plmnId:
-                  mcc: 208
-                  mnc: 93
-                opc: "981d464c7c52eb6e5036234984ad0bcf"
-                key: "5122250214c33e723a5dd523fc145fc0"
-                sequenceNumber: "16f3b3f70fc2"
-              - profileType: nwtriggeruedereg # profile type
-                profileName: profile6 # uniqely identifies a profile within application
-                enable: false # Set true to execute the profile, false otherwise.
-                gnbName: gnb1 # gNB to be used for this profile
-                execInParallel: false #run all subscribers in this profile parallel
-                startImsi: 208930100007497 # First IMSI. Subsequent values will be used if ueCount is more than 1
-                ueCount: 5 # Number of UEs for which the profile will be executed
-                defaultAs: "192.168.250.1" #default icmp pkt destination
-                perUserTimeout: 100 #if no expected event received in this time then treat it as failure
-                plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>. Should match startImsi
-                  mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
-                  mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
-                opc: "981d464c7c52eb6e5036234984ad0bcf"
-                key: "5122250214c33e723a5dd523fc145fc0"
-                sequenceNumber: "16f3b3f70fc2"
-              - profileType: uereqpdusessrelease # profile type
-                profileName: profile7 # uniqely identifies a profile within application
-                enable: false # Set true to execute the profile, false otherwise.
-                gnbName: gnb1 # gNB to be used for this profile
-                execInParallel: false #run all subscribers in this profile parallel
-                startImsi: 208930100007497 # First IMSI. Subsequent values will be used if ueCount is more than 1
-                ueCount: 5 # Number of UEs for which the profile will be executed
-                plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>. Should match startImsi
-                  mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
-                  mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
-                defaultAs: "192.168.250.1" #default icmp pkt destination
-                perUserTimeout: 100 #if no expected event received in this time then treat it as failure
-                opc: "981d464c7c52eb6e5036234984ad0bcf"
-                key: "5122250214c33e723a5dd523fc145fc0"
-                sequenceNumber: "16f3b3f70fc2"
+                      "repeat": 0     # default=0 (execute once)
+                      "next":  "quit" # default=quit (no more iterations)
+
