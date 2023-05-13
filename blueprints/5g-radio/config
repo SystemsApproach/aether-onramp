@@ -11,7 +11,7 @@ DATA_IFACE := eth0
 SA_CORE := true
 
 # For installing the Core
-SD_CORE_CHART            := aether/sd-core
+SD_CORE_CHART            := aether/sd-core --version 0.12.5 # latest not working
 
 # For installing the ROC
 AETHER_ROC_UMBRELLA_CHART := aether/aether-roc-umbrella
