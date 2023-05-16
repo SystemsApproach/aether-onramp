@@ -149,3 +149,7 @@ clean: | roc-clean monitoring-clean core-clean net-clean
 	rm -rf $(M)
 endif
 
+cluster-prep: 
+	echo "Target for building a cluster"
+	echo "Need to integrate earlier -- k8s-ready"
+
