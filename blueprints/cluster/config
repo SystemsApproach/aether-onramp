@@ -1,0 +1,35 @@
+# Copyright 2021-present Open Networking Foundation
+#
+# SPDX-License-Identifier: Apache-2.0
+
+# Configuration for In-a-Box (with latest charts) Blueprint 
+
+# Variables
+ENABLE_RANSIM := true
+LOCAL_CHARTS := false
+DATA_IFACE := data
+SA_CORE := true
+
+# For installing the Core
+SD_CORE_CHART            := aether/sd-core --version 0.12.5 # latest not working
+
+# For installing the Core
+GNBSIM_CHART            := aether/xxxxxx   # issue of value files for multiple pods????
+
+# For installing the ROC
+AETHER_ROC_UMBRELLA_CHART := aether/aether-roc-umbrella
+ATOMIX_CONTROLLER_CHART   := atomix/atomix-controller
+ATOMIX_RAFT_STORAGE_CHART := atomix/atomix-raft-storage
+ATOMIX_RUNTIME_CHART      := atomix/atomix-runtime --version 0.1.9  # v0.2.0 not working
+ONOS_OPERATOR_CHART       := onosproject/onos-operator
+
+# For installing monitoring
+RANCHER_MONITORING_CRD_CHART := rancher/rancher-monitoring-crd
+RANCHER_MONITORING_CHART     := rancher/rancher-monitoring
+
+# Helm Value Overrides and other Config Files
+ROC_VALUES     := $(BLUEPRINTDIR)/roc-values.yaml 
+ROC_5G_MODELS  := $(BLUEPRINTDIR)/roc-5g-models.json 
+5G_CORE_VALUES := $(BLUEPRINTDIR)/sd-core-5g-values.yaml
+GNBSIM_VALUES := $(BLUEPRINTDIR)/gnbsim-values.yaml 
+MONITORING_VALUES := $(BLUEPRINTDIR)/monitoring.yaml
