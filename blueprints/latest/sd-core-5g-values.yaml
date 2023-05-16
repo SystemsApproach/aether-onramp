@@ -357,7 +357,7 @@ omec-user-plane:
                 key: "5122250214c33e723a5dd523fc145fc0"
                 sequenceNumber: "16f3b3f70fc2"
 
-              - profileType: uetriggservicereq  # UE Initiated Service Release
+              - profileType: uetriggservicereq  # UE Initiated Service Request
                 profileName: profile4
                 enable: false
                 gnbName: gnb1
