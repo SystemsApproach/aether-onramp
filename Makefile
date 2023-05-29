@@ -6,7 +6,7 @@
 include ./MakefileVar.mk
 include ./mk/*.mk
 
-.PHONY: $(NET_PHONY) $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) node-prep clean
+.PHONY: $(NET_PHONY) $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) $(GNBSIM_PHONY) node-prep clean
 
 $(M):
 	mkdir -p $(M)
@@ -149,6 +149,10 @@ clean: | roc-clean monitoring-clean core-clean net-clean
 	rm -rf $(M)
 endif
 
+# should probably move cluster-prep into mk/cluster.mk
+# likely to support both cluster-prep and node-prep
+#   for a while (but eventually node-prep will be a
+#   special case of cluster-prep)
 cluster-prep: 
 	echo "Target for building a cluster"
 	echo "Need to integrate earlier -- k8s-ready"
