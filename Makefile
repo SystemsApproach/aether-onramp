@@ -117,7 +117,15 @@ $(M)/k8s-ready: | $(M)/setup
 	sudo chown -R $(shell id -u):$(shell id -g) $(HOME)/.kube
 	touch $@
 
-$(M)/helm-ready: | $(M)/k8s-ready
+$(M)/longhorn-ready:
+	sudo systemctl enable iscsid.service
+	sudo systemctl start iscsid.service
+	curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v1.4.2/scripts/environment_check.sh | bash
+	sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.4.2/deploy/longhorn.yaml
+	sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml wait nodes --for=condition=Ready --all --timeout=300s
+	sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml wait deployment -n longhorn-system --for=condition=available --all --timeout=300s
+
+$(M)/helm-ready: | $(M)/k8s-ready $(M)/longhorn-ready
 	curl -fsSL -o ${GET_HELM} https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
 	chmod 700 ${GET_HELM}
 	sudo DESIRED_VERSION=$(HELM_VERSION) ./${GET_HELM}
