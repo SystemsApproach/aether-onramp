@@ -26,8 +26,10 @@ include:
 Note that the first three blueprints do *not* depend on the most
 recently published Helm Charts (as is the case for AiaB). All three
 blueprints give explicit chart version numbers that have been
-certified to work in OnRamp. The release number corresponds to
-the version of the corresponding ``AETHER_ROC_UMBRELLA_CHART``.
+certified to work in OnRamp.
+
+The release-numbered blueprints (e.g., ``release-2.1.33``) correspond
+to specific versions of the ``AETHER_ROC_UMBRELLA_CHART``.
 Since ROC defines and implements Aether's API, this represents the
 semantic version of Aether's externally visible interface. A limited
 number of such earlier version will be archived in this way.
