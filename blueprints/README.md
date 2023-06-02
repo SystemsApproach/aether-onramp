@@ -32,7 +32,7 @@ The release-numbered blueprints (e.g., ``release-2.1.33``) correspond
 to specific versions of the ``AETHER_ROC_UMBRELLA_CHART``.
 Since ROC defines and implements Aether's API, this represents the
 semantic version of Aether's externally visible interface. A limited
-number of such earlier version will be archived in this way.
+number of such earlier versions will be archived in this way.
 
 As new Helm Charts are released, they are first tested and certified in
 OnRamp's ``candidate`` branch before being merged into ``master``.
