@@ -11,17 +11,17 @@ are configured. All of these parameters are defined in the
 blueprint’s ``config`` file. Currently supported blueprints
 include:
 
-* ``latest``: Deploys the latest stable version of Aether in a
+* ``latest``: Deploys the latest certified version of Aether in a
    single server (or VM), running an emulated RAN. 
 
-* ``4g-radio``: Deploys the latest stable version of Aether in
+* ``4g-radio``: Deploys the latest certified version of Aether in
    a single server (or VM), connected to a physical eNB. 
 
-* ``5g-radio``: Deploys the latest stable version of Aether in
+* ``5g-radio``: Deploys the latest certified version of Aether in
    a single server (or VM), connected to a physical gNB. 
 
-* ``release-2.1.x``: Deploys Aether v2.1.x in a single server
-    (or VM), running an emulated RAN.
+* ``release-2.1.x``: Deploys older Aether v2.1.x version in a single
+    server (or VM), running an emulated RAN.
 
 Note that the first three blueprints do *not* depend on the most
 recently published Helm Charts (as is the case for AiaB). All three
