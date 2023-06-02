@@ -14,7 +14,7 @@ SA_CORE := true
 SD_CORE_CHART            := aether/sd-core --version 0.12.6
 
 # Charts for installing ROC
-AETHER_ROC_UMBRELLA_CHART := aether/aether-roc-umbrella --version 2.1.36
+AETHER_ROC_UMBRELLA_CHART := aether/aether-roc-umbrella --version 2.1.35
 ATOMIX_RUNTIME_CHART      := atomix/atomix-runtime --version 0.1.9
 ONOS_OPERATOR_CHART       := onosproject/onos-operator --version 0.5.6
 
