@@ -29,5 +29,6 @@ $(M)/longhorn-ready:
 	touch $@
 
 store-clean:
-	echo "Need to clean up"
+	@echo "This could take 2-3 minutes..."
+	kubectl delete namespace longhorn-system || true
 	@cd $(M); rm -f longhorn-ready store-prep
