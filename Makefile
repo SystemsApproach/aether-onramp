@@ -6,7 +6,7 @@
 include ./MakefileVar.mk
 include ./mk/*.mk
 
-.PHONY: $(NET_PHONY) $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) node-prep clean
+.PHONY: $(NET_PHONY) $(STORE_PHONY) $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) node-prep clean
 
 $(M):
 	mkdir -p $(M)
