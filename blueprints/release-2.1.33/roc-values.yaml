@@ -4,10 +4,14 @@
 
 global:
   atomix:
+    storage:
+      controller: "atomix-controller.kube-system:5679"
     store:
       consensus:
         enabled: true
-        name: ""
+        clusters: 1
+        replicas: 3
+        partitions: 30
 
 
 import:

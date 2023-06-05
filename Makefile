@@ -6,7 +6,7 @@
 include ./MakefileVar.mk
 include ./mk/*.mk
 
-.PHONY: $(NET_PHONY) $(STORE_PHONY) $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) node-prep clean
+.PHONY: $(NET_PHONY) $(GITOPS_PHONY) $(AMP_PHONY) $(CORE_PHONY) node-prep clean
 
 $(M):
 	mkdir -p $(M)
@@ -50,7 +50,6 @@ $(M)/initial-setup: | $(M) $(M)/interface-check
 	sudo apt update; sudo apt install -y software-properties-common python3 python3-pip python3-venv jq httpie ipvsadm apparmor apparmor-utils
 	systemctl list-units --full -all | grep "docker.service" || sudo apt install -y docker.io
 	sudo adduser $(USER) docker || true
-	systemctl list-units --full -all | grep "iscsid.service" || sudo apt install open-iscsi
 	touch $(M)/initial-setup
 
 ifeq ($(PROXY_ENABLED),true)
@@ -144,7 +143,7 @@ node-prep: | $(M)/helm-ready /opt/cni/bin/static
 
 
 ifeq ($(K8S_INSTALL),rke2)
-clean: | roc-clean monitoring-clean core-clean net-clean store-clean
+clean: | roc-clean monitoring-clean core-clean net-clean
 	sudo /usr/local/bin/rke2-uninstall.sh || true
 	sudo rm -rf /usr/local/bin/kubectl
 	rm -rf $(M)
