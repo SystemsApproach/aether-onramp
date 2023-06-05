@@ -26,6 +26,8 @@ $(M)/roc: $(M)/helm-ready
 			--values $(ROC_VALUES) \
 			atomix-runtime \
 			$(ATOMIX_RUNTIME_CHART); \
+		kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml --wait=true; \
+		kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'; \
 	fi
 	helm upgrade --install --wait $(HELM_GLOBAL_ARGS) \
 		--namespace kube-system \
