@@ -6,10 +6,10 @@ STORE_PHONY :=  store-prep local-path-ready store-clean
 
 store-prep: node-prep
 ifeq ($(STORE),local-path)
-store-prep: $(M)/local-path-ready
-endif
-
+store-prep: $(M)/local-path-ready $(M)/store-prep
+else
 store-prep: $(M)/store-prep
+endif
 $(M)/store-prep:
 	touch $@
 

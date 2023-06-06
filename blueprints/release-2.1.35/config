@@ -9,6 +9,7 @@ ENABLE_RANSIM := true
 LOCAL_CHARTS := false
 DATA_IFACE := data
 SA_CORE := true
+STORE := none
 
 # Charts for installing the core
 SD_CORE_CHART            := aether/sd-core --version 0.12.6
