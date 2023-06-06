@@ -21,6 +21,7 @@ HELM_VERSION	  ?= v3.6.3
 KUBECTL_VERSION   ?= v1.23.0
 
 RKE2_K8S_VERSION  ?= v1.23.4+rke2r1
+LPP_VERSION       ?= v0.0.24
 K8S_VERSION       ?= v1.20.11
 
 ENABLE_ROUTER ?= true

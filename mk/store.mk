@@ -2,18 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-# Define the storage option here (for now)
-# Eventually belongs in blueprints/*/config
-#   but also need to modify roc-values.yaml
-#   accordingly (currently longhorn-specific)
-STORE ?= local-path
-
-STORE_PHONY :=  store-prep longhorn-ready local-path-ready store-clean
+STORE_PHONY :=  store-prep local-path-ready store-clean
 
 store-prep: node-prep
-ifeq ($(STORE),longhorn)
-store-prep: $(M)/longhorn-ready
-endif
 ifeq ($(STORE),local-path)
 store-prep: $(M)/local-path-ready
 endif
@@ -23,21 +14,13 @@ $(M)/store-prep:
 	touch $@
 
 $(M)/local-path-ready:
-	kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml --wait=true; \
-	kubectl patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'; \
-	touch $@
-
-# also works for 2.1.36, but is overkill (keeping for later)
-$(M)/longhorn-ready:
-	sudo systemctl enable iscsid.service
-	sudo systemctl start iscsid.service
-	curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v1.4.2/scripts/environment_check.sh | bash
-	sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f https://raw.githubusercontent.com/longhorn/longhorn/v1.4.2/deploy/longhorn.yaml
-	sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml wait nodes --for=condition=Ready --all --timeout=300s
-	sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml wait deployment -n longhorn-system --for=condition=available --all --timeout=300s
+	@$(eval STORAGE_CLASS := $(shell /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml get storageclass -o name))
+	@echo "STORAGE_CLASS: ${STORAGE_CLASS}"
+	if [ "$(STORAGE_CLASS)" == "" ]; then \
+		sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/$(LPP_VERSION)/deploy/local-path-storage.yaml --wait=true; \
+		sudo /var/lib/rancher/rke2/bin/kubectl --kubeconfig /etc/rancher/rke2/rke2.yaml patch storageclass local-path -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'; \
+	fi
 	touch $@
 
 store-clean:
-	@echo "This could take 2-3 minutes..."
-	kubectl delete namespace longhorn-system || true
-	@cd $(M); rm -f longhorn-ready store-prep local-path-ready
+	@cd $(M); rm -f store-prep local-path-ready

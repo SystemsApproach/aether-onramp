@@ -5,7 +5,7 @@
 AMP_PHONY := roc 4g-roc 5g-roc roc-clean monitoring 4g-monitoring 5g-monitoring monitoring-clean
 
 roc: $(M)/roc
-$(M)/roc: $(M)/helm-ready
+$(M)/roc: $(M)/helm-ready $(M)/store-ready
 	kubectl get namespace aether-roc 2> /dev/null || kubectl create namespace aether-roc
 	helm repo update
 	if [ "$(LOCAL_CHARTS)" == "true" ]; then helm dep up $(AETHER_ROC_UMBRELLA_CHART); fi
