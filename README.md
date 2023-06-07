@@ -34,3 +34,12 @@ Aether OnRamp. This material includes the
 [Edge Cloud Operations](https://ops.systemsapproach.org) books in the
 [Systems Approach Series](https://www.systemsapproach.org/books.html).
 
+If you found your way to this README from a printed copy of the Private 5G
+book, then be aware that OnRamp is an active project and has likely changed. 
+You can either follow the instructions in the aforementioned 
+[Guide](https://5g.systemsapproach.org/software/overview.html), or
+you can checkout a tagged version of OnRamp that corresponds to the printed
+Appendix by going to the directory you cloned and typing:
+
+``git checkout book-v1.0``
+

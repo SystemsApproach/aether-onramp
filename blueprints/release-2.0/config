@@ -8,6 +8,7 @@
 ENABLE_RANSIM := true
 LOCAL_CHARTS := false
 DATA_IFACE := data
+STORE := none
 
 # For installing the Core
 SD_CORE_CHART            := aether/sd-core --version 0.10.20
